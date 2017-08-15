@@ -1,0 +1,19 @@
+3
+2
+1 0 0 1
+1 0 1 1
+1 0 1 0
+0 1 0 1
+0 1 1 1
+0 1 1 0
+5
+# A maze file contains multiple lines
+# The first line is the width, followed by no space
+# The second line is the height, followed by no space
+# the following height * width lines are as follows:
+# the i-th line correspond to cell (i % width, i // width)
+# and contains 4 numbers separated with spaces and
+# corresponding to the weight of connecting it to
+# its upper cell, its downward cell, its left cell and its right cell
+# the last line contains the pieces of cheese, using the same encoding
+# and separated with blank spaces
