@@ -1,12 +1,18 @@
+# About
+
+This is the software of the course PyRat [a link](http://formations.telecom-bretagne.eu/pyrat).
+
+Code by Vincent Gripon
+
+Illustrations by Lauren Lefumeur-Pasdeloup and Christina Roberts
+
+See full credits here: [a link](http://formations.telecom-bretagne.eu/pyrat/?page_id=264)
+
 # Usage
 
 1. Open a terminal and navigate to the folder containing pyrat2.py
-2. Run 'python3 pyrat2.py ai.py <ai2.py>'
-2.bis Note that on many systems, python is by default python3 and thus 'python pyrat2.py ai.py <ai2.py>' is enough
 
-The second ai argument ('ai2.py') is optionnal and can be omitted.
-
-Parameters of the game can be directly modified by changing the file 'parameters.py'
+2. Run 'python3 pyrat.py --help' for a complete list of options. A good start is 'python3 pyrat.py --rat AIs/smallAI.py'
 
 # Install
 
@@ -15,6 +21,8 @@ To be able to run, one should only need python3 and pygame for python3
 On Ubuntu, a typical installation would be:
 
 sudo apt-get install python3-setuptools
+
 sudo easy_install3 pip
+
 sudo pip3.5 install pygame
 
