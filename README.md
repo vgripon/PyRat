@@ -26,3 +26,6 @@ sudo easy_install3 pip
 
 sudo pip3.5 install pygame
 
+On Windows:
+
+pip install pygame
