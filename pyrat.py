@@ -60,7 +60,7 @@ def play_sound(effect):
 
 def player(pet, filename, q_in, q_out, q_quit, width, height, preparation_time, turn_time):
     try:
-        player = importlib.import_module(filename.split(".")[0].replace("/","."))
+        player = importlib.import_module(filename.split(".")[0].replace("/",".").replace("\\","."))
         name = str(getattr(player, "TEAM_NAME"))
         preprocessing = getattr(player, "preprocessing")
         turn = getattr(player, "turn")
