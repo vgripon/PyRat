@@ -1,12 +1,12 @@
 # About
 
-This is the software of the course PyRat [a link](http://formations.telecom-bretagne.eu/pyrat).
+This is the software of the course [PyRat](http://formations.telecom-bretagne.eu/pyrat).
 
 Code by Vincent Gripon
 
 Illustrations by Lauren Lefumeur-Pasdeloup and Christina Roberts
 
-See full credits here: [a link](http://formations.telecom-bretagne.eu/pyrat/?page_id=264)
+See full credits [here](http://formations.telecom-bretagne.eu/pyrat/?page_id=264).
 
 # Usage
 
