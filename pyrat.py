@@ -175,7 +175,7 @@ def send_info(text, q_info):
 
 # This is the core function that runs a game. It takes the screen as argument
 # and returns stats about the game
-def run_game(screen):
+def run_game(screen, infoObject):
     global is_human_rat, is_human_python
     # Generate connected maze
     width, height, pieces_of_cheese, maze = generate_maze(args.width, args.height, args.density, not(args.nonconnected), not(args.nonsymmetric), args.mud_density, args.mud_range, args.maze_file)
@@ -227,12 +227,12 @@ def run_game(screen):
     p2name = str(q2_out.get())
 
     # Start rendering
-    q_render = mp.Queue()
-    q_render_in = mp.Queue()
-    q_info = mp.Queue()
+    q_render = Queue()
+    q_render_in = Queue()
+    q_info = Queue()
     if not(args.nodrawing):
-        q_render_quit = mp.Queue ()
-        draw = Thread(target=run, args=(maze, width, height, q_render, q_render_in, q_render_quit, p1name, p2name, q1_out, q2_out, is_human_rat, is_human_python, q_info, pieces_of_cheese, player1_location, player2_location, args.rat != "", args.python != "", screen))
+        q_render_quit = Queue ()
+        draw = Thread(target=run, args=(maze, width, height, q_render, q_render_in, q_render_quit, p1name, p2name, q1_out, q2_out, is_human_rat, is_human_python, q_info, pieces_of_cheese, player1_location, player2_location, args.rat != "", args.python != "", screen, infoObject))
         draw.start()
 
     # Send initial information to players
@@ -352,36 +352,42 @@ def run_game(screen):
     q1_quit.put(True)
     q2_quit.put(True)
     # Check if players are not waiting for info
-    if p1.is_alive():
-        try:
-            for i in range(5):
-                q1_in.put(None)
-        except:
-            ()
-    if p2.is_alive():
-        try:
-            for i in range(5):
-                q2_in.put(None)
-        except:
-            ()
-    # If they are still not dead, ask them gently to stop
-    if p1.is_alive():
-        try:
-            p1.terminate()
-        except:
-            ()
-    if p2.is_alive():
-        try:
-            p2.terminate()
-        except:
-            ()
-    # If they are still not dead, kill them
-    while p1.is_alive() or p2.is_alive():
+    try:
         if p1.is_alive():
-            os.kill(p1.pid, signal.SIGKILL)
+            try:
+                for i in range(5):
+                    q1_in.put(None)
+            except:
+                ()
         if p2.is_alive():
-            os.kill(p2.pid, signal.SIGKILL)
-        time.sleep(0.01)
+            try:
+                for i in range(5):
+                    q2_in.put(None)
+            except:
+                ()
+        # If they are still not dead, ask them gently to stop
+        if p1.is_alive():
+            try:
+                p1.terminate()
+            except:
+                ()
+        if p2.is_alive():
+            try:
+                p2.terminate()
+            except:
+                ()
+    except:
+        ()
+    # If they are still not dead, kill them
+    try:
+        while p1.is_alive() or p2.is_alive():
+            if p1.is_alive():
+                os.kill(p1.pid, signal.SIGKILL)
+            if p2.is_alive():
+                os.kill(p2.pid, signal.SIGKILL)
+            time.sleep(0.01)
+    except:
+        ()
     # Stop the graphical interface as well
     if not(args.nodrawing):
         if args.auto_exit:
@@ -394,15 +400,20 @@ def run_game(screen):
 # Start program
 pygame.init()
 if not(args.nodrawing):
-    screen = pygame.display.set_mode((args.window_width, args.window_height))
+    infoObject = pygame.display.Info()
+    image_icon = pygame.image.load("resources/various/pyrat.ico")
+    pygame.display.set_icon(image_icon)
+    pygame.display.set_caption("PyRat")
+    screen = pygame.display.set_mode((args.window_width, args.window_height), pygame.RESIZABLE)
 else:
     screen = ""
+    infoObject = ""
 # Run first game
-result = run_game(screen)
+result = run_game(screen, infoObject)
 # Run other games (if any)
 for i in range(args.tests - 1):
     print("match " + str(i+2) + "/" + str(args.tests))
-    new = run_game(screen)
+    new = run_game(screen, infoObject)
     result = {x: result.get(x, 0) + new.get(x, 0) for x in set(result).union(new)}
 result = {k: v / args.tests for k, v in result.items()}
 # Print stats and exit
