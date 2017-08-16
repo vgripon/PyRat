@@ -12,7 +12,7 @@ See full credits [here](http://formations.telecom-bretagne.eu/pyrat/?page_id=264
 
 1. Open a terminal and navigate to the folder containing pyrat2.py
 
-2. Run 'python3 pyrat.py --help' for a complete list of options. A good start is 'python3 pyrat.py --rat AIs/smallAI.py'
+2. Run 'python3 pyrat.py --help' for a complete list of options. A good start is 'python3 pyrat.py --rat AIs/random.py'
 
 # Install
 

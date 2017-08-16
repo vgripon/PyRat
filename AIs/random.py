@@ -135,16 +135,7 @@ import random
 ####################################################################################################################################################################################################################################
 
 def preprocessing (mazeMap, mazeWidth, mazeHeight, playerLocation, opponentLocation, piecesOfCheese, timeAllowed) :
-    
-    # Example prints that appear in the shell only at the beginning of the game
-    # Remove them when you write your own program
-    print("<b>[mazeMap]</b> " + repr(mazeMap))
-    print("<b>[mazeWidth]</b> " + repr(mazeWidth))
-    print("<b>[mazeHeight]</b> " + repr(mazeHeight))
-    print("<b>[playerLocation]</b> " + repr(playerLocation))
-    print("<b>[opponentLocation]</b> " + repr(opponentLocation))
-    print("<b>[piecesOfCheese]</b> " + repr(piecesOfCheese))
-    print("<b>[timeAllowed]</b> " + repr(timeAllowed))
+    return
 
 ####################################################################################################################################################################################################################################
 ################################################# TURN FUNCTION ############################################################################################### FONCTION DE TOUR DE JEU ############################################
