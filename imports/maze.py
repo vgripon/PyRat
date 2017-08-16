@@ -142,7 +142,7 @@ def generate_maze(width, height, target_density, connected, symmetry, mud_densit
                 if symmetry:
                     if not(bsym in connected) and (asym in connected):
                         connected.append(bsym)
-                    connected_region(maze, bsym, connected)
+                        connected_region(maze, bsym, connected)
         pieces_of_cheese = []
     return width, height, pieces_of_cheese, maze
 

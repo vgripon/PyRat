@@ -41,12 +41,16 @@ parser.add_argument('--nodrawing', action="store_true", help='Desactivate drawin
 parser.add_argument('--tests', type=int, metavar = "tests", help='Number of tests (for statistics)', default=1)
 parser.add_argument('--maze_file', metavar = "maze_file", help='Specific maze file to load', default="")
 args = parser.parse_args()
+args.window_height = int(10 * args.window_width / 16)
+
+# Check for conflicts
 if args.synchronous and not(args.desactivate_animations):
     print("Note: in synchronous mode, animations are automatically desactivated", file=sys.stderr)
     args.desactivate_animations = True
 if args.nodrawing:
     args.auto_exit = True
-
+if args.tests > 1:
+    args.auto_exit = True
 if args.python=="human":
     is_human_python = True
 else:
@@ -55,3 +59,5 @@ if args.rat=="human":
     is_human_rat = True
 else:
     is_human_rat = False
+if args.width < 1 or args.height < 1:
+    sys.exit("maze is too small")
