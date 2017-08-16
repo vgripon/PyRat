@@ -187,7 +187,7 @@ def run_game():
         p2.start()
     else:
         q2_out.put("human")
-        
+
     # Run game
     score1 = 0
     score2 = 0
@@ -210,13 +210,13 @@ def run_game():
     q_info = Queue()
     if not(args.nodrawing):
         q_render_quit = Queue ()
-        draw = Thread(target=run, args=(maze, width, height, q_render, q_render_in, q_render_quit, p1name, p2name, q1_out, q2_out, is_human_rat, is_human_python, q_info))
+        draw = Thread(target=run, args=(maze, width, height, q_render, q_render_in, q_render_quit, p1name, p2name, q1_out, q2_out, is_human_rat, is_human_python, q_info, pieces_of_cheese, player1_location, player2_location, player1_is_alive, player2_is_alive))
         draw.start()
-    q_render.put(pieces_of_cheese)
-    q_render.put(player1_location)
-    q_render.put(player2_location)
-    q_render.put(args.rat != "")
-    q_render.put(args.python != "")
+    # q_render.put(pieces_of_cheese)
+    # q_render.put(player1_location)
+    # q_render.put(player2_location)
+    # q_render.put(args.rat != "")
+    # q_render.put(args.python != "")
 
     initial_info(q1_in, player1_location, player2_location, maze, pieces_of_cheese)
     initial_info(q2_in, player2_location, player1_location, maze, pieces_of_cheese)

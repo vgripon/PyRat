@@ -169,15 +169,15 @@ def generate_pieces_of_cheese(nb_pieces, width, height, symmetry, player1_locati
     while remaining > 0:
         if len(candidates) == 0:
             sys.exit("Too many pieces of cheese for that dimension of maze")
-        chosen = random.randrange(len(candidates))
-        pieces.append(candidates[chosen])
+        chosen = candidates[random.randrange(len(candidates))]
+        pieces.append(chosen)
         if symmetry:
-            a, b = candidates[chosen]
+            a, b = chosen
             pieces.append((width - a - 1, height - 1 - b))
             symmetric = (width - a - 1, height - 1 - b)
             candidates = [i for i in candidates if i != symmetric]
             remaining = remaining - 1
-        candidates = [i for i in candidates if i != candidates[chosen]]
+        candidates = [i for i in candidates if i != chosen]
         remaining = remaining - 1
     return pieces
         
