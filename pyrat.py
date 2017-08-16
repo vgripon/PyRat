@@ -236,13 +236,13 @@ def run_game():
         stuck1 = stuck1 - 1
         stuck2 = stuck2 - 1
 
-        if args.synchronous:
-            if stuck1 > 0:
-                stucks1 = stucks1 + stuck1
-            if stuck2 > 0:
-                stucks2 = stucks2 + stuck2
-            stuck1 = 0
-            stuck2 = 0
+        # if args.synchronous:
+        #     if stuck1 > 0:
+        #         stucks1 = stucks1 + stuck1
+        #     if stuck2 > 0:
+        #         stucks2 = stucks2 + stuck2
+        #     stuck1 = 0
+        #     stuck2 = 0
     
         if player1_location in pieces_of_cheese and stuck1 <= 0 and args.rat != "":
             pieces_of_cheese.remove(player1_location)
