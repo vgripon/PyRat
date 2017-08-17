@@ -31,3 +31,9 @@ sudo pip3.5 install pygame
 On Windows:
 
 pip install pygame
+
+# Notes
+
+On Windows expect numerous bugs
+
+On MacOS, do not expect anything
