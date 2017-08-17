@@ -178,14 +178,17 @@ def send_info(text, q_info):
 def run_game(screen, infoObject):
     global is_human_rat, is_human_python
     # Generate connected maze
+    debug("Generating maze",1)
     width, height, pieces_of_cheese, maze = generate_maze(args.width, args.height, args.density, not(args.nonconnected), not(args.nonsymmetric), args.mud_density, args.mud_range, args.maze_file)
     player1_location = (0,0)
     player2_location = (width - 1, height - 1)
     # Generate cheese
+    debug("Generating pieces of cheese",1)
     if pieces_of_cheese == []:
         pieces_of_cheese = generate_pieces_of_cheese(args.pieces, width, height, not(args.nonsymmetric), player1_location, player2_location)
 
     # Create communications queues with players
+    debug("Generating pipes with players",1)
     q1_in = mp.Queue()
     q2_in = mp.Queue()
     q1_out = mp.Queue()
@@ -194,6 +197,7 @@ def run_game(screen, infoObject):
     q2_quit = mp.Queue()
 
     # Instantiate players
+    debug("Instantiating players",1)
     if not(is_human_rat):
         p1 = mp.Process(target=player, args=("rat", args.rat, q1_in, q1_out, q1_quit, width, height, args.preparation_time, args.turn_time,))
         p1.start()
@@ -206,6 +210,7 @@ def run_game(screen, infoObject):
         q2_out.put("human")
 
     # Initialize stats
+    debug("Creating variables",1)
     score1 = 0
     score2 = 0
     stuck1 = 0
@@ -223,10 +228,12 @@ def run_game(screen, infoObject):
     win2 = 0
     
     # Retrieve names
+    debug("Reading names of players",1)
     p1name = str(q1_out.get())
     p2name = str(q2_out.get())
 
     # Start rendering
+    debug("Starting rendering",1)
     q_render = Queue()
     q_render_in = Queue()
     q_info = Queue()
@@ -236,6 +243,7 @@ def run_game(screen, infoObject):
         draw.start()
 
     # Send initial information to players
+    debug("Send initial information to players and start preprocessing",1)
     initial_info(q1_in, player1_location, player2_location, maze, pieces_of_cheese)
     initial_info(q2_in, player2_location, player1_location, maze, pieces_of_cheese)
 
@@ -244,6 +252,7 @@ def run_game(screen, infoObject):
         time.sleep(args.preparation_time / 1000.0)        
 
     # Main loop
+    debug("Starting game",1)
     while 1:
         # First tell players if game is finished
         q1_quit.put(False)
@@ -399,7 +408,9 @@ def run_game(screen, infoObject):
 
 def main():
     # Start program
+    debug("Starting pygame...")
     pygame.init()
+    debug("Defining screen object...")
     if not(args.nodrawing):
         infoObject = pygame.display.Info()
         image_icon = pygame.image.load("resources/various/pyrat.ico")
@@ -415,12 +426,16 @@ def main():
         screen = ""
         infoObject = ""
         # Run first game
+    debug("Starting first game")
     result = run_game(screen, infoObject)
     # Run other games (if any)
     for i in range(args.tests - 1):
+        debug("Starting match number " + str(i))
         print("match " + str(i+2) + "/" + str(args.tests))
         new = run_game(screen, infoObject)
+        debug("Aggregating stats")
         result = {x: result.get(x, 0) + new.get(x, 0) for x in set(result).union(new)}
+    debug("Writing stats and exiting")
     result = {k: v / args.tests for k, v in result.items()}
     # Print stats and exit
     print(repr(result))
