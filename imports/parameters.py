@@ -41,6 +41,7 @@ parser.add_argument('--nodrawing', action="store_true", help='Desactivate drawin
 parser.add_argument('--tests', type=int, metavar = "tests", help='Number of tests (for statistics)', default=1)
 parser.add_argument('--maze_file', metavar = "maze_file", help='Specific maze file to load', default="")
 parser.add_argument('--fullscreen', action="store_true", help='Start game in fullscreen (you can press the "f" key instead)')
+parser.add_argument('--debug', action="store_true", help='Activate debug information')
 args = parser.parse_args()
 args.window_height = int(10 * args.window_width / 16)
 
@@ -62,3 +63,11 @@ else:
     is_human_rat = False
 if args.width < 1 or args.height < 1:
     sys.exit("maze is too small")
+
+# Debugging function
+def debug(text, tabs=0):
+    if args.debug:
+        print("\t" * tabs + text, file=sys.stderr)
+    else:
+        ()
+    
