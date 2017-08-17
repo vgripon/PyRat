@@ -210,6 +210,7 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
     debug("Starting main loop",2)
     while q_quit.empty():
         debug("Checking events",2)
+        pygame.event.pump()
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and (event.key == pygame.K_q or event.key == pygame.K_ESCAPE)):
                 q_quit.put("")
