@@ -164,10 +164,12 @@ def build_background(screen, maze, tiles, image_tile, image_wall, image_corner, 
 def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_out, is_human_rat, is_human_python, q_info, pieces_of_cheese, player1_location, player2_location, player1_is_alive, player2_is_alive, screen, infoObject):
     global args
 
+    debug("Starting rendering",2)
     window_width, window_height = pygame.display.get_surface().get_size()
     turn_time = args.turn_time
     scale, offset_x, offset_y, image_cheese, image_corner, image_moving_python, image_moving_rat, image_python, image_rat, image_wall, image_mud, image_portrait_python, image_portrait_rat, tiles, image_tile = init_coords_and_images(width, height, player1_is_alive, player2_is_alive, window_width, window_height)
 
+    debug("Defining constants",2)
     clock = pygame.time.Clock()
     new_player1_location = player1_location
     new_player2_location = player2_location
@@ -184,6 +186,7 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
     stuck1 = 0
     stuck2 = 0
 
+    debug("Trying to initialize Joystick",2)
     pygame.joystick.init()
     try:
         j0 = pygame.joystick.Joystick(0)
@@ -197,13 +200,16 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
     except pygame.error:        
         ()
 
+    debug("Building background image",2)
     maze_image = build_background(screen, maze, tiles, image_tile, image_wall, image_corner, image_mud, offset_x, offset_y, width, height, window_width, window_height, image_portrait_rat, image_portrait_python, scale, player1_is_alive, player2_is_alive)
 
     starting_time = pygame.time.get_ticks()
 
     text_info = ""
 
+    debug("Starting main loop",2)
     while q_quit.empty():
+        debug("Checking events",2)
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and (event.key == pygame.K_q or event.key == pygame.K_ESCAPE)):
                 q_quit.put("")
@@ -273,7 +279,7 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
                 reset1 = True
         except:
             ()
-
+        debug("Looking for updates from core program",2)
         if not(q.empty()):
             pieces_of_cheese, nnew_player1_location, nnew_player2_location, score1, score2, moves1, moves2, miss1, miss2, stuck1, stuck2 = q.get()            
             if not(args.desactivate_animations):
@@ -288,7 +294,8 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
             if args.desactivate_animations:
                 player1_location = new_player1_location
                 player2_location = new_player2_location
-             
+
+        debug("Starting draw",2)
         screen.fill((0, 0, 0))
         screen.blit(maze_image, (0,0))
         
@@ -338,13 +345,15 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
             remaining = args.preparation_time - pygame.time.get_ticks() + starting_time
             if remaining > 0:
                 draw_text("Starting in " + str(remaining // 1000) + "." + (str(remaining % 1000)).zfill(3), (255,255,255), window_width, 4, window_width // 2, 25, screen)
-        
+
+        debug("Drawing on screen",2)
         pygame.display.flip()
         if not(args.desactivate_animations):
             clock.tick(60)
         else:
             if not(args.synchronous):                
                 clock.tick(1000/turn_time)
+    debug("Exiting rendering", 2)
     q_render_in.put("quit")
     if is_human_python:
         q2_out.put("")
