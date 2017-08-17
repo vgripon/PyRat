@@ -210,7 +210,6 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
     debug("Starting main loop",2)
     while q_quit.empty():
         debug("Checking events",2)
-        pygame.event.pump()
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and (event.key == pygame.K_q or event.key == pygame.K_ESCAPE)):
                 q_quit.put("")
@@ -243,7 +242,8 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
                     play(q2_out, "U")                                        
                 if event.key == pygame.K_KP5:
                     play(q2_out, "D")
-                    
+
+        debug("Processing joysticks",2)
         try:
             x , y = j0.get_axis(0), j0.get_axis(1)
             if x < -0.7 and reset0:
