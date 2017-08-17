@@ -14,7 +14,7 @@ See full credits [here](http://formations.telecom-bretagne.eu/pyrat/?page_id=264
 
 2. Run 'python3 pyrat.py --help' for a complete list of options. A good start is 'python3 pyrat.py --rat AIs/random.py'
 
-You can play with keyboard (tested on Linux and Windows) with 'python pyrat.py --rat human --python human'. The rat is controlled with arrows and the python with keypad.
+You can play with keyboard (tested on Linux and Windows) with 'python pyrat.py --rat human --python human' (replace with 'python3' if running Ubuntu). The rat is controlled with arrows and the python with keypad.
 
 # Install
 

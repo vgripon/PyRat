@@ -404,7 +404,12 @@ if not(args.nodrawing):
     image_icon = pygame.image.load("resources/various/pyrat.ico")
     pygame.display.set_icon(image_icon)
     pygame.display.set_caption("PyRat")
-    screen = pygame.display.set_mode((args.window_width, args.window_height), pygame.RESIZABLE)
+    if args.fullscreen:
+        screen = pygame.display.set_mode((infoObject.current_w, infoObject.current_h), pygame.FULLSCREEN)
+        args.window_width = infoObject.current_w
+        args.window_height = infoObject.current_h
+    else:
+        screen = pygame.display.set_mode((args.window_width, args.window_height), pygame.RESIZABLE)
 else:
     screen = ""
     infoObject = ""

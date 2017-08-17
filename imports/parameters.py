@@ -40,6 +40,7 @@ parser.add_argument('-mt', '--max_turns', type=int, metavar = "mt", help='Max nu
 parser.add_argument('--nodrawing', action="store_true", help='Desactivate drawing')
 parser.add_argument('--tests', type=int, metavar = "tests", help='Number of tests (for statistics)', default=1)
 parser.add_argument('--maze_file', metavar = "maze_file", help='Specific maze file to load', default="")
+parser.add_argument('--fullscreen', action="store_true", help='Start game in fullscreen (you can press the "f" key instead)')
 args = parser.parse_args()
 args.window_height = int(10 * args.window_width / 16)
 

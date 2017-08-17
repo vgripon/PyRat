@@ -197,19 +197,22 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
 
     maze_image = build_background(screen, maze, tiles, image_tile, image_wall, image_corner, image_mud, offset_x, offset_y, width, height, window_width, window_height, image_portrait_rat, image_portrait_python, scale, player1_is_alive, player2_is_alive)
 
+    starting_time = pygame.time.get_ticks()
+
     text_info = ""
 
     while q_quit.empty():
         for event in pygame.event.get():
-            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and (event.key == pygame.K_q or event.key == pygame.K_ESCAPE)):
                 q_quit.put("")
                 break
             if event.type == pygame.VIDEORESIZE or (event.type == pygame.KEYDOWN and event.key == pygame.K_f):
-                if event.type == pygame.KEYDOWN and pygame.FULLSCREEN:
+                if event.type == pygame.KEYDOWN and not(screen.get_flags() & 0x80000000):
                     screen = pygame.display.set_mode((infoObject.current_w, infoObject.current_h), pygame.FULLSCREEN)
                     window_width, window_height = infoObject.current_w, infoObject.current_h
                 else:
-                    window_width, window_height = event.w, event.h
+                    if event.type == pygame.VIDEORESIZE:
+                        window_width, window_height = event.w, event.h
                     screen = pygame.display.set_mode((window_width, window_height),pygame.RESIZABLE)
                 scale, offset_x, offset_y, image_cheese, image_corner, image_moving_python, image_moving_rat, image_python, image_rat, image_wall, image_mud, image_portrait_python, image_portrait_rat, tiles, image_tile = init_coords_and_images(width, height, player1_is_alive, player2_is_alive, window_width, window_height)
                 maze_image = build_background(screen, maze, tiles, image_tile, image_wall, image_corner, image_mud, offset_x, offset_y, width, height, window_width, window_height, image_portrait_rat, image_portrait_python, scale, player1_is_alive, player2_is_alive)
@@ -273,8 +276,8 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
                 player2_location = new_player2_location
              
         screen.fill((0, 0, 0))
-        
         screen.blit(maze_image, (0,0))
+        
         draw_pieces_of_cheese(pieces_of_cheese, image_cheese, offset_x, offset_y, scale, width, height, screen, window_height)
         if not(args.desactivate_animations):
             if time_to_go1 <= pygame.time.get_ticks() or player1_location == new_player1_location:
@@ -316,7 +319,12 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
         if not(q_info.empty()):
             text_info = q_info.get()
         if text_info != "":
-            draw_text(text_info, (255,255,255), window_width, 4, window_width // 2, window_height // 2, screen)
+            draw_text(text_info, (255,255,255), window_width, 4, window_width // 2, 25, screen)
+        if pygame.time.get_ticks() - starting_time < args.preparation_time:
+            remaining = args.preparation_time - pygame.time.get_ticks() + starting_time
+            if remaining > 0:
+                draw_text("Starting in " + str(remaining // 1000) + "." + (str(remaining % 1000)).zfill(3), (255,255,255), window_width, 4, window_width // 2, 25, screen)
+        
         pygame.display.flip()
         if not(args.desactivate_animations):
             clock.tick(60)
@@ -324,4 +332,9 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
             if not(args.synchronous):                
                 clock.tick(1000/turn_time)
     q_render_in.put("quit")
+    if is_human_python:
+        q2_out.put("")
+    if is_human_rat:
+        q1_out.put("")
+
 
