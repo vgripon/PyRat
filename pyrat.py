@@ -20,7 +20,7 @@
 from imports.parameters import *
 from imports.maze import *
 from imports.display import *
-import importlib
+import importlib.util
 import sys
 import time
 from queue import Queue
@@ -62,20 +62,24 @@ def play_sound(effect):
 def player(pet, filename, q_in, q_out, q_quit, width, height, preparation_time, turn_time):
     # First we try to launch a regular AI
     try:
-        player = importlib.import_module(filename.split(".")[0].replace("/",".").replace("\\","."))
-        name = str(getattr(player, "TEAM_NAME"))
-        preprocessing = getattr(player, "preprocessing")
-        turn = getattr(player, "turn")
+        player = importlib.util.spec_from_file_location("player",filename)
+        module = importlib.util.module_from_spec(player)
+        player.loader.exec_module(module)        
+        name = module.TEAM_NAME
+        preprocessing = module.preprocessing
+        turn = module.turn
         existence = True
     # In case there is a problem, we launch the dummy AI which basically does nothing
     except:
         if filename != "":
             print("Error: " + str((sys.exc_info()[0])), file=sys.stderr)
             print("Error while loading player controlling " + pet + ", dummy player loaded instead", file=sys.stderr)
-        player = importlib.import_module("imports.dummyplayer")
-        name = str(getattr(player, "TEAM_NAME"))
-        preprocessing = getattr(player, "preprocessing")
-        turn = getattr(player, "turn")
+        player = importlib.util.spec_from_file_location("player","imports/dummyplayer.py")
+        module = importlib.util.module_from_spec(player)
+        player.loader.exec_module(module)        
+        name = module.TEAM_NAME
+        preprocessing = module.preprocessing
+        turn = module.turn
         existence = False
     # We communicate our name to the main program
     q_out.put(name)
