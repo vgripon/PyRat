@@ -189,9 +189,11 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
         j0 = pygame.joystick.Joystick(0)
         j0.init()
         print('Enabled joystick: ' + j0.get_name(), file=sys.stderr)
+        reset0 = True
         j1 = pygame.joystick.Joystick(1)
         j1.init()
         print('Enabled joystick: ' + j1.get_name(), file=sys.stderr)
+        reset1 = True
     except pygame.error:        
         ()
 
@@ -237,26 +239,38 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
                     
         try:
             x , y = j0.get_axis(0), j0.get_axis(1)
-            if x < -0.7:
+            if x < -0.7 and reset0:
                 play(q1_out, "L")
-            if x > 0.7:
+                reset0 = False
+            if x > 0.7 and reset0:
                 play(q1_out, "R")
-            if y < -0.7:
+                reset0 = False
+            if y < -0.7 and reset0:
                 play(q1_out, "U")
-            if y > 0.7:
+                reset0 = False
+            if y > 0.7 and reset0:
                 play(q1_out, "D")
+                reset0 = False
+            if x > -0.7 and x < 0.7 and y > -0.7 and y < 0.7:
+                reset0 = True
         except:
             ()
         try:
             x , y = j1.get_axis(0), j1.get_axis(1)
-            if x < -0.7:
+            if x < -0.7 and reset1:
                 play(q2_out, "L")
-            if x > 0.7:
+                reset1 = False
+            if x > 0.7 and reset1:
                 play(q2_out, "R")
-            if y < -0.7:
+                reset1 = False
+            if y < -0.7 and reset1:
                 play(q2_out, "U")
-            if y > 0.7:
+                reset1 = False
+            if y > 0.7 and reset1:
                 play(q2_out, "D")
+                reset1 = False
+            if x > -0.7 and x < 0.7 and y > -0.7 and y < 0.7:
+                reset1 = True
         except:
             ()
 
