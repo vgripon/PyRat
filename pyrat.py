@@ -397,30 +397,34 @@ def run_game(screen, infoObject):
     # Send stats about the game
     return {"win_rat": win1, "win_python": win2, "score_rat": score1, "score_python": score2, "moves_rat": moves1, "moves_python": moves2, "miss_rat": miss1, "miss_python": miss2, "stucks_rat":stucks1, "stucks_python":stucks2}
 
-# Start program
-pygame.init()
-if not(args.nodrawing):
-    infoObject = pygame.display.Info()
-    image_icon = pygame.image.load("resources/various/pyrat.ico")
-    pygame.display.set_icon(image_icon)
-    pygame.display.set_caption("PyRat")
-    if args.fullscreen:
-        screen = pygame.display.set_mode((infoObject.current_w, infoObject.current_h), pygame.FULLSCREEN)
-        args.window_width = infoObject.current_w
-        args.window_height = infoObject.current_h
+def main():
+    # Start program
+    pygame.init()
+    if not(args.nodrawing):
+        infoObject = pygame.display.Info()
+        image_icon = pygame.image.load("resources/various/pyrat.ico")
+        pygame.display.set_icon(image_icon)
+        pygame.display.set_caption("PyRat")
+        if args.fullscreen:
+            screen = pygame.display.set_mode((infoObject.current_w, infoObject.current_h), pygame.FULLSCREEN)
+            args.window_width = infoObject.current_w
+            args.window_height = infoObject.current_h
+        else:
+            screen = pygame.display.set_mode((args.window_width, args.window_height), pygame.RESIZABLE)
     else:
-        screen = pygame.display.set_mode((args.window_width, args.window_height), pygame.RESIZABLE)
-else:
-    screen = ""
-    infoObject = ""
-# Run first game
-result = run_game(screen, infoObject)
-# Run other games (if any)
-for i in range(args.tests - 1):
-    print("match " + str(i+2) + "/" + str(args.tests))
-    new = run_game(screen, infoObject)
-    result = {x: result.get(x, 0) + new.get(x, 0) for x in set(result).union(new)}
-result = {k: v / args.tests for k, v in result.items()}
-# Print stats and exit
-print(repr(result))
-pygame.quit()
+        screen = ""
+        infoObject = ""
+        # Run first game
+    result = run_game(screen, infoObject)
+    # Run other games (if any)
+    for i in range(args.tests - 1):
+        print("match " + str(i+2) + "/" + str(args.tests))
+        new = run_game(screen, infoObject)
+        result = {x: result.get(x, 0) + new.get(x, 0) for x in set(result).union(new)}
+    result = {k: v / args.tests for k, v in result.items()}
+    # Print stats and exit
+    print(repr(result))
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
