@@ -358,6 +358,9 @@ def run_game(screen, infoObject):
         except queue.Empty:
             ()
 
+        # Magic solver for windows problems (does not like pygame in threads)
+        pygame.event.pump()
+        
         # Finally update informations about the game
         player1_location, player2_location, stuck1, stuck2, moves1, moves2, miss1, miss2 = move(decision1, decision2, maze, player1_location, player2_location, stuck1, stuck2, moves1, moves2, miss1, miss2)
 
