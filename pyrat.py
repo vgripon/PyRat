@@ -72,7 +72,8 @@ def player(pet, filename, q_in, q_out, q_quit, width, height, preparation_time, 
     # In case there is a problem, we launch the dummy AI which basically does nothing
     except:
         if filename != "":
-            print("Error: " + str((sys.exc_info()[0])), file=sys.stderr)
+            var = traceback.format_exc()
+            print("Error: " + var, file=sys.stderr)
             print("Error while loading player controlling " + pet + ", dummy player loaded instead", file=sys.stderr)
         player = importlib.util.spec_from_file_location("player","imports/dummyplayer.py")
         module = importlib.util.module_from_spec(player)
@@ -432,7 +433,7 @@ def main():
     else:
         screen = ""
         infoObject = ""
-        # Run first game
+    # Run first game
     debug("Starting first game")
     result = run_game(screen, infoObject)
     # Run other games (if any)
