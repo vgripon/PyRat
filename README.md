@@ -20,7 +20,7 @@ You can play with keyboard (tested on Linux and Windows) with 'python pyrat.py -
 
 To be able to run, one should only need python3 and pygame for python3
 
-On Ubuntu, a typical installation would be:
+* On Ubuntu, a typical installation would be:
 
 sudo apt-get install python3-setuptools
 
@@ -28,12 +28,12 @@ sudo easy_install3 pip
 
 sudo pip3.5 install pygame
 
-On Windows:
+* On Windows:
 
 pip install pygame
 
 # Notes
 
-On Windows expect numerous bugs
+* On Windows expect numerous bugs
 
-On MacOS, do not expect anything
+* On MacOS, do not expect anything
