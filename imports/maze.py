@@ -21,10 +21,10 @@ import imports.parameters
 
 # compute the connected component of a given initial cell with depth-first search
 def connected_region(maze, cell, connected):
-  for neighbor in maze[cell]:
-    if not(neighbor in connected):
-        connected.append(neighbor)
-        connected_region(maze, neighbor, connected)
+  for (i,j) in maze[cell]:
+    if connected[i][j] == 0:
+        connected[i][j] = 1
+        connected_region(maze, (i, j), connected)
 
 def gen_mud(mud_density, mud_range):
     if random.uniform(0, 1) < mud_density:
@@ -108,24 +108,25 @@ def generate_maze(width, height, target_density, connected, symmetry, mud_densit
 
         # Then connect it
         if connected:
-            connected = [(0,height-1)]
+            connected = [[0 for x in range(width)] for y in range(height)]
+            connected[0][height-1] = 1
             connected_region(maze, (0,height-1), connected)
             while 1:
-                if len(connected) >= width * height:
-                    break
                 border = []
                 for i in range(width):
                     for j in range(height):
                         if not((i+1,j) in maze[(i,j)]) and i + 1 < width:
-                            if ((i+1,j) in connected and not((i,j) in connected)):
+                            if connected[i+1][j] == 1 and connected[i][j] == 0:
                                 border.append(((i+1,j),(i,j)))
-                            elif ((i,j) in connected and not((i+1,j) in connected)):
+                            elif connected[i][j] == 1 and connected[i+1][j] == 0:
                                 border.append(((i,j),(i+1,j)))
                         if not((i,j+1) in maze[(i,j)]) and j + 1 < height:
-                            if ((i,j+1) in connected and not((i,j) in connected)):
+                            if connected[i][j+1] == 1 and connected[i][j] == 0:
                                 border.append(((i,j+1),(i,j)))
-                            elif ((i,j) in connected and not((i,j+1) in connected)):
+                            elif connected[i][j] == 1 and connected[i][j+1] == 0:
                                 border.append(((i,j),(i,j+1)))
+                if border == []:
+                    break
                 a,b = border[random.randrange(len(border))]
                 m = gen_mud(mud_density, mud_range)
                 maze[a][b] = m
@@ -137,11 +138,11 @@ def generate_maze(width, height, target_density, connected, symmetry, mud_densit
                     asym = (width - 1 - ai, height - 1 - aj)
                     maze[asym][bsym] = m
                     maze[bsym][asym] = m
-                connected.append(b)
+                connected[bi][bj] = 1
                 connected_region(maze, b, connected)
                 if symmetry:
-                    if not(bsym in connected) and (asym in connected):
-                        connected.append(bsym)
+                    if connected[bj][bi] == 0 and connected[aj][ai] == 1:
+                        connected[bj][bi] = 1
                         connected_region(maze, bsym, connected)
         pieces_of_cheese = []
     return width, height, pieces_of_cheese, maze
