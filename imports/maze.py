@@ -108,7 +108,7 @@ def generate_maze(width, height, target_density, connected, symmetry, mud_densit
 
         # Then connect it
         if connected:
-            connected = [[0 for x in range(width)] for y in range(height)]
+            connected = [[0 for x in range(height)] for y in range(width)]
             connected[0][height-1] = 1
             connected_region(maze, (0,height-1), connected)
             while 1:
@@ -141,8 +141,8 @@ def generate_maze(width, height, target_density, connected, symmetry, mud_densit
                 connected[bi][bj] = 1
                 connected_region(maze, b, connected)
                 if symmetry:
-                    if connected[bj][bi] == 0 and connected[aj][ai] == 1:
-                        connected[bj][bi] = 1
+                    if connected[width - 1 - bi][height - 1 - bj] == 0 and connected[width - 1 - ai][height - 1 - aj] == 1:
+                        connected[width - 1 - bi][height - 1 - bj] = 1
                         connected_region(maze, bsym, connected)
         pieces_of_cheese = []
     return width, height, pieces_of_cheese, maze
