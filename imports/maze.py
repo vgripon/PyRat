@@ -20,11 +20,12 @@ import sys
 import imports.parameters
 
 # compute the connected component of a given initial cell with depth-first search
-def connected_region(maze, cell, connected):
+def connected_region(maze, cell, connected, possible_border):
   for (i,j) in maze[cell]:
     if connected[i][j] == 0:
         connected[i][j] = 1
-        connected_region(maze, (i, j), connected)
+        possible_border.append((i,j))
+        connected_region(maze, (i, j), connected, possible_border)
 
 def gen_mud(mud_density, mud_range):
     if random.uniform(0, 1) < mud_density:
@@ -109,22 +110,33 @@ def generate_maze(width, height, target_density, connected, symmetry, mud_densit
         # Then connect it
         if connected:
             connected = [[0 for x in range(height)] for y in range(width)]
+            possible_border = [(0,height-1)]
             connected[0][height-1] = 1
-            connected_region(maze, (0,height-1), connected)
+            connected_region(maze, (0,height-1), connected, possible_border)
             while 1:
                 border = []
-                for i in range(width):
-                    for j in range(height):
-                        if not((i+1,j) in maze[(i,j)]) and i + 1 < width:
-                            if connected[i+1][j] == 1 and connected[i][j] == 0:
-                                border.append(((i+1,j),(i,j)))
-                            elif connected[i][j] == 1 and connected[i+1][j] == 0:
-                                border.append(((i,j),(i+1,j)))
-                        if not((i,j+1) in maze[(i,j)]) and j + 1 < height:
-                            if connected[i][j+1] == 1 and connected[i][j] == 0:
-                                border.append(((i,j+1),(i,j)))
-                            elif connected[i][j] == 1 and connected[i][j+1] == 0:
-                                border.append(((i,j),(i,j+1)))
+                new_possible_border = []
+                for (i,j) in possible_border:
+                    is_candidate = False
+                    if not((i+1,j) in maze[(i,j)]) and i + 1 < width:
+                        if connected[i+1][j] == 0:
+                            border.append(((i,j),(i+1,j)))
+                            is_candidate = True
+                    if not((i-1,j) in maze[(i,j)]) and i > 0:
+                        if connected[i-1][j] == 0:
+                            border.append(((i,j),(i-1,j)))
+                            is_candidate = True                            
+                    if not((i,j+1) in maze[(i,j)]) and j + 1 < height:
+                        if connected[i][j+1] == 0:
+                            border.append(((i,j),(i,j+1)))
+                            is_candidate = True                    
+                    if not((i,j-1) in maze[(i,j)]) and j > 0:
+                        if connected[i][j-1] == 0:
+                            border.append(((i,j),(i,j-1)))
+                            is_candidate = True
+                    if is_candidate:
+                        new_possible_border.append((i,j))
+                possible_border = new_possible_border
                 if border == []:
                     break
                 a,b = border[random.randrange(len(border))]
@@ -139,11 +151,13 @@ def generate_maze(width, height, target_density, connected, symmetry, mud_densit
                     maze[asym][bsym] = m
                     maze[bsym][asym] = m
                 connected[bi][bj] = 1
-                connected_region(maze, b, connected)
+                connected_region(maze, b, connected, possible_border)
+                possible_border.append(b)
                 if symmetry:
                     if connected[width - 1 - bi][height - 1 - bj] == 0 and connected[width - 1 - ai][height - 1 - aj] == 1:
                         connected[width - 1 - bi][height - 1 - bj] = 1
-                        connected_region(maze, bsym, connected)
+                        connected_region(maze, bsym, connected, possible_border)
+                        possible_border.append(bsym)
         pieces_of_cheese = []
     return width, height, pieces_of_cheese, maze
 
