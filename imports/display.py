@@ -191,12 +191,10 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
     try:
         j0 = pygame.joystick.Joystick(0)
         j0.init()
-        print('Enabled joystick: ' + j0.get_name(), file=sys.stderr)
-        reset0 = True
+        print('Enabled joystick: ' + j0.get_name() + ' with ' + str(j0.get_numaxes()) + ' axes', file=sys.stderr)
         j1 = pygame.joystick.Joystick(1)
         j1.init()
-        print('Enabled joystick: ' + j1.get_name(), file=sys.stderr)
-        reset1 = True
+        print('Enabled joystick: ' + j1.get_name() + ' with ' + str(j1.get_numaxes()) + ' axes', file=sys.stderr)
     except pygame.error:        
         ()
 
@@ -245,39 +243,27 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
 
         debug("Processing joysticks",2)
         try:
-            x , y = j0.get_axis(0), j0.get_axis(1)
-            if x < -0.7 and reset0:
+            x , y = j0.get_axis(3), j0.get_axis(4)
+            if x < -0.7:
                 play(q1_out, "L")
-                reset0 = False
-            if x > 0.7 and reset0:
+            if x > 0.7:
                 play(q1_out, "R")
-                reset0 = False
-            if y < -0.7 and reset0:
+            if y < -0.7:
                 play(q1_out, "U")
-                reset0 = False
-            if y > 0.7 and reset0:
+            if y > 0.7:
                 play(q1_out, "D")
-                reset0 = False
-            if x > -0.7 and x < 0.7 and y > -0.7 and y < 0.7:
-                reset0 = True
         except:
             ()
         try:
-            x , y = j1.get_axis(0), j1.get_axis(1)
-            if x < -0.7 and reset1:
+            x , y = j1.get_axis(3), j1.get_axis(4)
+            if x < -0.7:
                 play(q2_out, "L")
-                reset1 = False
-            if x > 0.7 and reset1:
+            if x > 0.7:
                 play(q2_out, "R")
-                reset1 = False
-            if y < -0.7 and reset1:
+            if y < -0.7:
                 play(q2_out, "U")
-                reset1 = False
-            if y > 0.7 and reset1:
+            if y > 0.7:
                 play(q2_out, "D")
-                reset1 = False
-            if x > -0.7 and x < 0.7 and y > -0.7 and y < 0.7:
-                reset1 = True
         except:
             ()
         debug("Looking for updates from core program",2)
