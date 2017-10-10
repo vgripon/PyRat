@@ -33,7 +33,7 @@ def gen_mud(mud_density, mud_range):
     else:
         return 1
 
-def generate_maze(width, height, target_density, connected, symmetry, mud_density, mud_range, maze_file):
+def generate_maze(width, height, target_density, connected, symmetry, mud_density, mud_range, maze_file, seed):
     if maze_file != "":
         with open(maze_file, 'r') as content_file:
             content = content_file.read()
@@ -59,6 +59,7 @@ def generate_maze(width, height, target_density, connected, symmetry, mud_densit
             l = int(line[i])
             pieces_of_cheese.append((l % width, l // width))
     else:
+        random.seed(seed)
         # Start with purely random maze
         maze = {};
         not_considered = {};

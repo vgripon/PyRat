@@ -17,6 +17,7 @@
 
 import argparse
 import sys
+import random
 
 # Parse arguments
 parser = argparse.ArgumentParser()
@@ -43,6 +44,7 @@ parser.add_argument('--maze_file', metavar = "maze_file", help='Specific maze fi
 parser.add_argument('--fullscreen', action="store_true", help='Start game in fullscreen (you can press the "f" key instead)')
 parser.add_argument('--debug', type=int, metavar = "debug_level", help='Debug level', default=0)
 parser.add_argument('--start_random', action="store_true", help='Players start at random location in the maze')
+parser.add_argument('--random_seed', type=int, metavar = "random_seed", help='random seed to use', default=random.random())
 args = parser.parse_args()
 args.window_height = int(10 * args.window_width / 16)
 

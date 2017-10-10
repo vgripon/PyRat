@@ -199,7 +199,7 @@ def run_game(screen, infoObject):
     global is_human_rat, is_human_python
     # Generate connected maze
     debug("Generating maze",1)
-    width, height, pieces_of_cheese, maze = generate_maze(args.width, args.height, args.density, not(args.nonconnected), not(args.nonsymmetric), args.mud_density, args.mud_range, args.maze_file)
+    width, height, pieces_of_cheese, maze = generate_maze(args.width, args.height, args.density, not(args.nonconnected), not(args.nonsymmetric), args.mud_density, args.mud_range, args.maze_file, args.random_seed)
     player1_location = (-1,-1)
     player2_location = (-1,-1)
     # Generate cheese
