@@ -98,6 +98,7 @@ def player(pet, filename, q_in, q_out, q_quit, width, height, preparation_time, 
     # We run each turn through this loop
     try:
         turn_delay = 0
+        turn_delay_count = 0
         while 1:
             # We get the new info
             try:
@@ -118,6 +119,7 @@ def player(pet, filename, q_in, q_out, q_quit, width, height, preparation_time, 
                 decision = turn(maze, width, height, player1_location, player2_location, score1, score2, pieces_of_cheese, turn_time)
                 after = time.time()
                 turn_delay = turn_delay + (after - before)
+                turn_delay_count = turn_delay_count + 1
             except Exception as e:
                 traceback.print_exc()
                 print(e, file=sys.stderr)
@@ -134,7 +136,7 @@ def player(pet, filename, q_in, q_out, q_quit, width, height, preparation_time, 
         module.postprocessing(maze, width, height, player1_location, player2_location, score1, score2, pieces_of_cheese, turn_time)
     except:
         ()
-    q_out.put((prep_time, turn_delay))
+    q_out.put((prep_time, turn_delay / turn_delay_count))
     
 # Utility function to convert strange time object to float
 def convert_time_to_int(datetime):
