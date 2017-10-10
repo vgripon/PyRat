@@ -227,17 +227,17 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
                 if event.key == pygame.K_LEFT:
                     play(q1_out, "L")
                 if event.key == pygame.K_RIGHT:
-                    play(q1_out, "R")                    
+                    play(q1_out, "R")
                 if event.key == pygame.K_UP:
-                    play(q1_out, "U")                    
+                    play(q1_out, "U")
                 if event.key == pygame.K_DOWN:
-                    play(q1_out, "D")                    
+                    play(q1_out, "D")
                 if event.key == pygame.K_KP4:
-                    play(q2_out, "L")                                        
+                    play(q2_out, "L")
                 if event.key == pygame.K_KP6:
-                    play(q2_out, "R")                                    
+                    play(q2_out, "R")
                 if event.key == pygame.K_KP8:
-                    play(q2_out, "U")                                        
+                    play(q2_out, "U")
                 if event.key == pygame.K_KP5:
                     play(q2_out, "D")
 
@@ -267,7 +267,7 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
         except:
             ()
         debug("Looking for updates from core program",2)
-        if not(q.empty()):
+        while not(q.empty()):
             pieces_of_cheese, nnew_player1_location, nnew_player2_location, score1, score2, moves1, moves2, miss1, miss2, stuck1, stuck2 = q.get()            
             if not(args.desactivate_animations):
                 if nnew_player1_location != new_player1_location:
@@ -284,7 +284,7 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
 
         debug("Starting draw",2)
         screen.fill((0, 0, 0))
-        screen.blit(maze_image, (0,0))
+        screen.blit(maze_image, (0, 0))
         
         draw_pieces_of_cheese(pieces_of_cheese, image_cheese, offset_x, offset_y, scale, width, height, screen, window_height)
         if not(args.desactivate_animations):

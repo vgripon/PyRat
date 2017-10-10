@@ -162,8 +162,13 @@ def generate_maze(width, height, target_density, connected, symmetry, mud_densit
     return width, height, pieces_of_cheese, maze
 
 # Generate pieces of cheese
-def generate_pieces_of_cheese(nb_pieces, width, height, symmetry, player1_location, player2_location):
-    remaining = nb_pieces
+def generate_pieces_of_cheese(nb_pieces, width, height, symmetry, player1_location, player2_location, start_random):
+    if start_random:
+        remaining = nb_pieces + 2
+    else:
+        remaining = nb_pieces
+        player1_location = (0, 0)
+        player2_location = (width - 1, height - 1)
     pieces = []
     candidates = []
     considered = []
@@ -194,5 +199,8 @@ def generate_pieces_of_cheese(nb_pieces, width, height, symmetry, player1_locati
             remaining = remaining - 1
         candidates = [i for i in candidates if i != chosen]
         remaining = remaining - 1
-    return pieces
+    if not(start_random):
+        pieces.append(player1_location)
+        pieces.append(player2_location)
+    return pieces[:-2], pieces[-2], pieces[-1]
         

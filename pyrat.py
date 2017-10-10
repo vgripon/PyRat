@@ -88,41 +88,54 @@ def player(pet, filename, q_in, q_out, q_quit, width, height, preparation_time, 
     maze, player1_location, player2_location, pieces_of_cheese = q_in.get()
     # Then we call the preprocessing function and catch any exception
     try:
+        before = time.time()
         preprocessing(maze, width, height, player1_location, player2_location, pieces_of_cheese, preparation_time)
+        after = time.time()
+        prep_time = after - before
     except Exception as e:
         traceback.print_exc()
         print(e, file=sys.stderr,)
     # We run each turn through this loop
     try:
+        turn_delay = 0
         while 1:
-            # First we check if the main program ask us to exit
-            try:
-                if q_quit.get():
-                    break
-            except:
-                break
-            # Then we get the new info
+            # We get the new info
             try:
                 player1_location, player2_location, score1, score2, pieces_of_cheese = q_in.get()
             except:
                 break
             if player1_location == None:
                 break
+            # Then we check if the main program ask us to exit
+            try:
+                if q_quit.get():
+                    break
+            except:
+                break
             # We now ask the AI what to do
             try:
+                before = time.time()
                 decision = turn(maze, width, height, player1_location, player2_location, score1, score2, pieces_of_cheese, turn_time)
+                after = time.time()
+                turn_delay = turn_delay + (after - before)
             except Exception as e:
                 traceback.print_exc()
                 print(e, file=sys.stderr)
                 decision = ""
-            # Finally we write send the decision to the main program
+            # Finally we send the decision to the main program
             try:                
                 q_out.put(decision)
             except:
                 ()
     except:
         ()
-
+    try:
+        player1_location, player2_location, score1, score2, pieces_of_cheese = q_in.get()
+        module.postprocessing(maze, width, height, player1_location, player2_location, score1, score2, pieces_of_cheese, turn_time)
+    except:
+        ()
+    q_out.put((prep_time, turn_delay))
+    
 # Utility function to convert strange time object to float
 def convert_time_to_int(datetime):
     return datetime.hour * 3600000 + datetime.minute * 60000 + datetime.second * 1000 + datetime.microsecond / 1000.0
@@ -185,12 +198,12 @@ def run_game(screen, infoObject):
     # Generate connected maze
     debug("Generating maze",1)
     width, height, pieces_of_cheese, maze = generate_maze(args.width, args.height, args.density, not(args.nonconnected), not(args.nonsymmetric), args.mud_density, args.mud_range, args.maze_file)
-    player1_location = (0,0)
-    player2_location = (width - 1, height - 1)
+    player1_location = (-1,-1)
+    player2_location = (-1,-1)
     # Generate cheese
     debug("Generating pieces of cheese",1)
     if pieces_of_cheese == []:
-        pieces_of_cheese = generate_pieces_of_cheese(args.pieces, width, height, not(args.nonsymmetric), player1_location, player2_location)
+        pieces_of_cheese, player1_location, player2_location = generate_pieces_of_cheese(args.pieces, width, height, not(args.nonsymmetric), player1_location, player2_location, args.start_random)
 
     # Create communications queues with players
     debug("Generating pipes with players",1)
@@ -368,21 +381,40 @@ def run_game(screen, infoObject):
     # Now the game is finished, send ending signals to players
     q1_quit.put(True)
     q2_quit.put(True)
+    q1_in.put(True)
+    q2_in.put(True)
+    send_turn(q1_in, player1_location, player2_location, score1, score2, pieces_of_cheese)
+    send_turn(q2_in, player2_location, player1_location, score2, score1, pieces_of_cheese)
+
+    while 1:
+        res = q1_out.get()
+        if res:
+            p1_prep_delay, p1_turn_delay = res
+            break
+        time.sleep(0.1)
+    while 1:
+        res = q2_out.get()
+        if res:
+            p2_prep_delay, p2_turn_delay = res
+            break
+        time.sleep(0.1)
+        
     # Check if players are not waiting for info
     try:
         if p1.is_alive():
             try:
                 for i in range(5):
-                    q1_in.put(None)
+                    q1_in.put(True)
             except:
                 ()
         if p2.is_alive():
             try:
                 for i in range(5):
-                    q2_in.put(None)
+                    q2_in.put(True)
             except:
                 ()
         # If they are still not dead, ask them gently to stop
+        time.sleep(0.1)
         if p1.is_alive():
             try:
                 p1.terminate()
@@ -395,6 +427,7 @@ def run_game(screen, infoObject):
                 ()
     except:
         ()
+    time.sleep(0.5)
     # If they are still not dead, kill them
     try:
         while p1.is_alive() or p2.is_alive():
@@ -412,7 +445,7 @@ def run_game(screen, infoObject):
         if draw.is_alive():
             q_render_in.get()
     # Send stats about the game
-    return {"win_rat": win1, "win_python": win2, "score_rat": score1, "score_python": score2, "moves_rat": moves1, "moves_python": moves2, "miss_rat": miss1, "miss_python": miss2, "stucks_rat":stucks1, "stucks_python":stucks2}
+    return {"win_rat": win1, "win_python": win2, "score_rat": score1, "score_python": score2, "moves_rat": moves1, "moves_python": moves2, "miss_rat": miss1, "miss_python": miss2, "stucks_rat":stucks1, "stucks_python":stucks2, "prep_time_rat":p1_prep_delay, "prep_time_python":p2_prep_delay, "turn_time_rat":p1_turn_delay, "turn_time_python":p2_turn_delay}
 
 def main():
     # Start program
