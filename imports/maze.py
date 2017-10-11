@@ -144,9 +144,9 @@ def generate_maze(width, height, target_density, connected, symmetry, mud_densit
                 m = gen_mud(mud_density, mud_range)
                 maze[a][b] = m
                 maze[b][a] = m
+                ai, aj = a
+                bi, bj = b
                 if symmetry:
-                    ai, aj = a
-                    bi, bj = b
                     bsym = (width - 1 - bi, height - 1 - bj)
                     asym = (width - 1 - ai, height - 1 - aj)
                     maze[asym][bsym] = m
