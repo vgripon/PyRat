@@ -44,7 +44,8 @@ parser.add_argument('--maze_file', metavar = "maze_file", help='Specific maze fi
 parser.add_argument('--fullscreen', action="store_true", help='Start game in fullscreen (you can press the "f" key instead)')
 parser.add_argument('--debug', type=int, metavar = "debug_level", help='Debug level', default=0)
 parser.add_argument('--start_random', action="store_true", help='Players start at random location in the maze')
-parser.add_argument('--random_seed', type=int, metavar = "random_seed", help='random seed to use in order to generate a specific maze', default=random.random())
+parser.add_argument('--save', action="store_true", help='Save game to file')
+parser.add_argument('--random_seed', type=int, metavar = "random_seed", help='random seed to use in order to generate a specific maze', default=random.randint(0,sys.maxsize))
 args = parser.parse_args()
 args.window_height = int(10 * args.window_width / 16)
 

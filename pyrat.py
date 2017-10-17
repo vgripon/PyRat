@@ -199,6 +199,7 @@ def run_game(screen, infoObject):
     global is_human_rat, is_human_python
     # Generate connected maze
     debug("Generating maze",1)
+    print("Using seed " + str(args.random_seed), file=sys.stderr)
     width, height, pieces_of_cheese, maze = generate_maze(args.width, args.height, args.density, not(args.nonconnected), not(args.nonsymmetric), args.mud_density, args.mud_range, args.maze_file, args.random_seed)
     player1_location = (-1,-1)
     player2_location = (-1,-1)
@@ -206,7 +207,18 @@ def run_game(screen, infoObject):
     debug("Generating pieces of cheese",1)
     if pieces_of_cheese == []:
         pieces_of_cheese, player1_location, player2_location = generate_pieces_of_cheese(args.pieces, width, height, not(args.nonsymmetric), player1_location, player2_location, args.start_random)
+    if args.save:
+        savefile = open("saves/"+str(args.random_seed),'w')
+        savefile.write("# MazeMap\n")
+        savefile.write(str(maze)+"\n")
+        savefile.write("# Pieces of cheese\n")
+        savefile.write(str(pieces_of_cheese)+"\n")
+        savefile.write("# Rat initial location\n")
+        savefile.write(str(player1_location)+"\n")
+        savefile.write("# Python initial location\n")
+        savefile.write(str(player2_location)+"\n")
 
+        
     # Create communications queues with players
     debug("Generating pipes with players",1)
     q1_in = mp.Queue()
@@ -343,6 +355,11 @@ def run_game(screen, infoObject):
             send_turn(q1_in, player1_location, player2_location, score1, score2, pieces_of_cheese)
         if stuck2 <= 0:
             send_turn(q2_in, player2_location, player1_location, score2, score1, pieces_of_cheese)
+        if args.save:
+            savefile.write("# turn "+str(turns) + " rat_location then python_location then pieces_of_cheese then rat_decision then python_decision\n")
+            savefile.write(str(player1_location) + "\n")
+            savefile.write(str(player2_location) + "\n")
+            savefile.write(str(pieces_of_cheese) + "\n")
 
         # Wait for the turn to end
         if not(args.synchronous):
@@ -366,6 +383,10 @@ def run_game(screen, infoObject):
         except:
             decision2 = "None"
 
+        if args.save:
+            savefile.write(decision1 + "\n")
+            savefile.write(decision2 + "\n")
+            
         # Check if graphical interface wants us to exit the game
         try:
             q_render_in.get(False)
@@ -446,7 +467,11 @@ def run_game(screen, infoObject):
         if draw.is_alive():
             q_render_in.get()
     # Send stats about the game
-    return {"win_rat": win1, "win_python": win2, "score_rat": score1, "score_python": score2, "moves_rat": moves1, "moves_python": moves2, "miss_rat": miss1, "miss_python": miss2, "stucks_rat":stucks1, "stucks_python":stucks2, "prep_time_rat":p1_prep_delay, "prep_time_python":p2_prep_delay, "turn_time_rat":p1_turn_delay, "turn_time_python":p2_turn_delay}
+    stats = {"win_rat": win1, "win_python": win2, "score_rat": score1, "score_python": score2, "moves_rat": moves1, "moves_python": moves2, "miss_rat": miss1, "miss_python": miss2, "stucks_rat":stucks1, "stucks_python":stucks2, "prep_time_rat":p1_prep_delay, "prep_time_python":p2_prep_delay, "turn_time_rat":p1_turn_delay, "turn_time_python":p2_turn_delay}
+    if args.save:
+        savefile.write(str(stats))
+        savefile.close()
+    return stats
 
 def main():
     # Start program
