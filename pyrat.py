@@ -209,6 +209,8 @@ def run_game(screen, infoObject):
         pieces_of_cheese, player1_location, player2_location = generate_pieces_of_cheese(args.pieces, width, height, not(args.nonsymmetric), player1_location, player2_location, args.start_random)
     if args.save:
         savefile = open("saves/"+str(args.random_seed),'w')
+        savefile.write("# Random seed\n")
+        savefile.write(str(args.random_seed)+"\n")
         savefile.write("# MazeMap\n")
         savefile.write(str(maze)+"\n")
         savefile.write("# Pieces of cheese\n")
