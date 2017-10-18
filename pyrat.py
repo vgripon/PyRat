@@ -201,6 +201,8 @@ def run_game(screen, infoObject):
     debug("Generating maze",1)
     if not(args.random_seed):
         random_seed = random.randint(0,sys.maxsize)
+    else:
+        random_seed = args.random_seed
     print("Using seed " + str(random_seed), file=sys.stderr)
     width, height, pieces_of_cheese, maze = generate_maze(args.width, args.height, args.density, not(args.nonconnected), not(args.nonsymmetric), args.mud_density, args.mud_range, args.maze_file, random_seed)
     player1_location = (-1,-1)
