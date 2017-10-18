@@ -199,8 +199,10 @@ def run_game(screen, infoObject):
     global is_human_rat, is_human_python
     # Generate connected maze
     debug("Generating maze",1)
-    print("Using seed " + str(args.random_seed), file=sys.stderr)
-    width, height, pieces_of_cheese, maze = generate_maze(args.width, args.height, args.density, not(args.nonconnected), not(args.nonsymmetric), args.mud_density, args.mud_range, args.maze_file, args.random_seed)
+    if not(args.random_seed):
+        random_seed = random.randint(0,sys.maxsize)
+    print("Using seed " + str(random_seed), file=sys.stderr)
+    width, height, pieces_of_cheese, maze = generate_maze(args.width, args.height, args.density, not(args.nonconnected), not(args.nonsymmetric), args.mud_density, args.mud_range, args.maze_file, random_seed)
     player1_location = (-1,-1)
     player2_location = (-1,-1)
     # Generate cheese
@@ -208,9 +210,9 @@ def run_game(screen, infoObject):
     if pieces_of_cheese == []:
         pieces_of_cheese, player1_location, player2_location = generate_pieces_of_cheese(args.pieces, width, height, not(args.nonsymmetric), player1_location, player2_location, args.start_random)
     if args.save:
-        savefile = open("saves/"+str(args.random_seed),'w')
+        savefile = open("saves/"+str(random_seed),'w')
         savefile.write("# Random seed\n")
-        savefile.write(str(args.random_seed)+"\n")
+        savefile.write(str(random_seed)+"\n")
         savefile.write("# MazeMap\n")
         savefile.write(str(maze)+"\n")
         savefile.write("# Pieces of cheese\n")
