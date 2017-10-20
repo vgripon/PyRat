@@ -208,7 +208,7 @@ def run_game(screen, infoObject):
     # Generate cheese
     debug("Generating pieces of cheese",1)
     if args.random_cheese:
-        random.seed(random.randint(0,sys.maxsize))
+        random.seed()
     if pieces_of_cheese == []:
         pieces_of_cheese, player1_location, player2_location = generate_pieces_of_cheese(args.pieces, width, height, not(args.nonsymmetric), player1_location, player2_location, args.start_random)
     if args.save:
