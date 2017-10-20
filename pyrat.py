@@ -131,11 +131,9 @@ def player(pet, filename, q_in, q_out, q_quit, width, height, preparation_time, 
                 ()
     except:
         ()
-    try:
-        player1_location, player2_location, score1, score2, pieces_of_cheese = q_in.get()
+    player1_location, player2_location, score1, score2, pieces_of_cheese = q_in.get()
+    if not(args.prevent_postprocessing):
         module.postprocessing(maze, width, height, player1_location, player2_location, score1, score2, pieces_of_cheese, turn_time)
-    except:
-        ()
     q_out.put((prep_time, turn_delay / turn_delay_count))
     
 # Utility function to convert strange time object to float
@@ -457,7 +455,7 @@ def run_game(screen, infoObject):
                 ()
     except:
         ()
-    time.sleep(0.5)
+    time.sleep(0.1)
     # If they are still not dead, kill them
     try:
         while p1.is_alive() or p2.is_alive():
