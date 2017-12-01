@@ -133,7 +133,11 @@ def player(pet, filename, q_in, q_out, q_quit, width, height, preparation_time, 
         ()
     player1_location, player2_location, score1, score2, pieces_of_cheese = q_in.get()
     if not(args.prevent_postprocessing):
-        module.postprocessing(maze, width, height, player1_location, player2_location, score1, score2, pieces_of_cheese, turn_time)
+        try:
+            module.postprocessing(maze, width, height, player1_location, player2_location, score1, score2, pieces_of_cheese, turn_time)
+        except Exception as e:
+            traceback.print_exc()        
+            print(e, file=sys.stderr,)
     q_out.put((prep_time, turn_delay / turn_delay_count))
     
 # Utility function to convert strange time object to float
