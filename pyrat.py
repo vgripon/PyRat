@@ -32,6 +32,9 @@ import signal
 import pygame
 import traceback
 
+if args.import_keras:
+    import keras
+
 # Sound effects. There are three sounds corresponding to any combination of players taking pieces of cheese at a given moment
 try:
     if not(args.nodrawing):
