@@ -48,6 +48,7 @@ parser.add_argument('--save', action="store_true", help='Save game to file')
 parser.add_argument('--random_seed', type=int, metavar = "random_seed", help='random seed to use in order to generate a specific maze', default=None)
 parser.add_argument('--random_cheese', action="store_true", help='Force cheese location to be random (even if used in combination with --random_seed)')
 parser.add_argument('--prevent_postprocessing', action="store_true", help='Prevent call to postprocessing function (useful for tournaments)')
+parser.add_argument('--import_keras', action="store_true", help='Import keras when loading pyrat to avoid multiple loads')
 args = parser.parse_args()
 args.window_height = int(10 * args.window_width / 16)
 
@@ -68,8 +69,8 @@ if args.rat=="human":
 else:
     is_human_rat = False
 if args.width < 1 or args.height < 1:
-    sys.exit("maze is too small")
-
+    sys.exit("maze is too small")    
+    
 # Debugging function
 def debug(text, debug_level = 0):
     if debug_level < args.debug:
