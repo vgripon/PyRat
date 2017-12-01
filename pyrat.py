@@ -117,6 +117,8 @@ def player(pet, filename, q_in, q_out, q_quit, width, height, preparation_time, 
             except:
                 break
             # We now ask the AI what to do
+            if pieces_of_cheese == []:
+                break
             try:
                 before = time.time()
                 decision = turn(maze, width, height, player1_location, player2_location, score1, score2, pieces_of_cheese, turn_time)
