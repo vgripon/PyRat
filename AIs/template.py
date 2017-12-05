@@ -2,10 +2,6 @@
 # http://formations.telecom-bretagne.eu/pyrat
 
 ###############################
-# Team name to be displayed in the game 
-TEAM_NAME = "_______"
-
-###############################
 # When the player is performing a move, it actually sends a character to the main program
 # The four possibilities are defined here
 MOVE_DOWN = 'D'

@@ -67,8 +67,8 @@ def player(pet, filename, q_in, q_out, q_quit, width, height, preparation_time, 
     try:
         player = importlib.util.spec_from_file_location("player",filename)
         module = importlib.util.module_from_spec(player)
-        player.loader.exec_module(module)        
-        name = module.TEAM_NAME
+        player.loader.exec_module(module)
+        name = filename.split("/")[-1].split(".")[0]        
         preprocessing = module.preprocessing
         turn = module.turn
         existence = True
