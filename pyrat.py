@@ -106,6 +106,8 @@ def player(pet, filename, q_in, q_out, q_quit, width, height, preparation_time, 
             # We get the new info
             try:
                 player1_location, player2_location, score1, score2, pieces_of_cheese = q_in.get()
+                while not(q_in.empty()):
+                    player1_location, player2_location, score1, score2, pieces_of_cheese = q_in.get()                                        
             except:
                 break
             if player1_location == None:
