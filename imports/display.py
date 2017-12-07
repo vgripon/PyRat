@@ -74,7 +74,7 @@ def draw_players_animate(player1_location, player2_location, image_python, image
     i, j = player2_location
     screen.blit(image_rat, (offset_x + scale * i, window_height - offset_y - scale * (j+1)))
 
-font_sizes = [50, 25, 50, 25, 50]
+font_sizes = [50, 25, 50, 25, 50, 50, 50]
 def draw_text(text, color, max_size, index_size, x, y, screen):
     global font_sizes
     font = pygame.font.SysFont("monospace", font_sizes[index_size])    
@@ -89,13 +89,13 @@ def draw_text(text, color, max_size, index_size, x, y, screen):
 def draw_scores(p1name, score1, image1, p2name, score2, image2, window_width, window_height, screen, player1_is_alive, player2_is_alive, moves1, miss1, moves2, miss2, stuck1, stuck2):
     if player1_is_alive:
         draw_text("Score: "+str(score1), (255,255,255), window_width / 6, 0, int(window_width / 12), window_width / 3 + 50, screen)
-        draw_text(p1name, (255,255,255), window_width / 6, 0, int(window_width / 12), window_width / 3, screen)
+        draw_text(p1name, (255,255,255), window_width / 6, 5, int(window_width / 12), window_width / 3, screen)
         draw_text("Moves: " + str(moves1), (0,255,0), window_width / 6, 1, int(window_width / 12), window_width / 3 + 150, screen)
         draw_text("Miss: " + str(miss1), (255,0,0), window_width / 6, 1, int(window_width / 12), window_width / 3 + 180, screen)
         draw_text("Mud: " + str(stuck1), (255,0,0), window_width / 6, 1, int(window_width / 12), window_width / 3 + 210, screen)
     if player2_is_alive:
         draw_text("Score: "+str(score2), (255,255,255), window_width / 6, 2, int(11 * window_width / 12), window_width / 3 + 50, screen)
-        draw_text(p2name, (255,255,255), window_width / 6, 2, int(11 * window_width / 12), window_width / 3, screen)
+        draw_text(p2name, (255,255,255), window_width / 6, 6, int(11 * window_width / 12), window_width / 3, screen)
         draw_text("Moves: " + str(moves2), (0,255,0), window_width / 6, 3, int(11 * window_width / 12), window_width / 3 + 150, screen)
         draw_text("Miss: " + str(miss2), (255,0,0), window_width / 6, 3, int(11 * window_width / 12), window_width / 3 + 180, screen)
         draw_text("Mud: " + str(stuck2), (255,0,0), window_width / 6, 3, int(11 * window_width / 12), window_width / 3 + 210, screen)    
@@ -150,7 +150,7 @@ def init_coords_and_images(width, height, player1_is_alive, player2_is_alive, wi
 def build_background(screen, maze, tiles, image_tile, image_wall, image_corner, image_mud, offset_x, offset_y, width, height, window_width, window_height, image_portrait_rat, image_portrait_python, scale, player1_is_alive, player2_is_alive):
     global font_sizes
     screen.fill((0, 0, 0))
-    font_sizes = [50, 25, 50, 25, 50]
+    font_sizes = [50, 25, 50, 25, 50, 50, 50]
     maze_image = screen.copy()
     image_of_maze(maze, tiles, image_tile, image_wall, image_corner, image_mud, offset_x, offset_y, scale, width, height, maze_image, window_height)
 
