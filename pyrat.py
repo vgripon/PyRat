@@ -342,8 +342,6 @@ def run_game(screen, infoObject):
         if args.rat != "" and args.python != "":
             if score1 == score2 and score1 >= args.pieces / 2:
                 send_info("The Rat(" + p1name + ") and the Python (" + p2name + ") got the same number of pieces of cheese!", q_info)
-                win1 = win1 + 0.5
-                win2 = win2 + 0.5
                 break
             if score1 > args.pieces / 2:
                 send_info("The Rat (" + p1name + ") won the match!", q_info)
