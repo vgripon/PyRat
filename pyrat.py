@@ -139,7 +139,7 @@ def player(pet, filename, q_in, q_out, q_quit, width, height, preparation_time, 
     except:
         ()
     player1_location, player2_location, score1, score2, pieces_of_cheese = q_in.get()
-    if not(args.prevent_postprocessing):
+    if args.postprocessing:
         try:
             module.postprocessing(maze, width, height, player1_location, player2_location, score1, score2, pieces_of_cheese, turn_time)
         except Exception as e:
