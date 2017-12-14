@@ -521,7 +521,10 @@ def main():
     debug("Writing stats and exiting")
     result = {k: v / args.tests for k, v in result.items()}
     # Print stats and exit
-    print(repr(result))
+    print("{")
+    for key,value in sorted(result.items()):
+        print("\t\"" + str(key) + "\": " + str(value))
+    print("}")
     pygame.quit()
 
 if __name__ == "__main__":
