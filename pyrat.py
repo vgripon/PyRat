@@ -426,15 +426,21 @@ def run_game(screen, infoObject):
 
     while 1:
         res = q1_out.get()
-        if res:
-            p1_prep_delay, p1_turn_delay = res
-            break
+        try:
+            if res:
+                p1_prep_delay, p1_turn_delay = res
+                break
+        except:
+            pass
         time.sleep(0.1)
     while 1:
         res = q2_out.get()
-        if res:
-            p2_prep_delay, p2_turn_delay = res
-            break
+        try:
+            if res:
+                p2_prep_delay, p2_turn_delay = res
+                break
+        except:
+            pass
         time.sleep(0.1)
         
     # Check if players are not waiting for info
