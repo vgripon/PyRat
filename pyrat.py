@@ -336,7 +336,7 @@ def run_game(screen, infoObject):
             play_sound(effect_right)
 
         # Send drawing informations to graphical interface
-        q_render.put((pieces_of_cheese, player1_location, player2_location, score1, score2, moves1, moves2, miss1, miss2, stucks1, stucks2))
+        q_render.put((pieces_of_cheese.copy(), player1_location, player2_location, score1, score2, moves1, moves2, miss1, miss2, stucks1, stucks2))
 
         # Check if one of the players won
         if args.rat != "" and args.python != "":
@@ -501,16 +501,20 @@ def main():
     pygame.init()
     debug("Defining screen object...")
     if not(args.nodrawing):
-        infoObject = pygame.display.Info()
-        image_icon = pygame.image.load("resources/various/pyrat.ico")
-        pygame.display.set_icon(image_icon)
-        pygame.display.set_caption("PyRat")
-        if args.fullscreen:
-            screen = pygame.display.set_mode((infoObject.current_w, infoObject.current_h), pygame.FULLSCREEN)
-            args.window_width = infoObject.current_w
-            args.window_height = infoObject.current_h
+        if not(args.saveimages):
+            infoObject = pygame.display.Info()
+            image_icon = pygame.image.load("resources/various/pyrat.ico")
+            pygame.display.set_icon(image_icon)
+            pygame.display.set_caption("PyRat")
+            if args.fullscreen:
+                screen = pygame.display.set_mode((infoObject.current_w, infoObject.current_h), pygame.FULLSCREEN)
+                args.window_width = infoObject.current_w
+                args.window_height = infoObject.current_h
+            else:
+                screen = pygame.display.set_mode((args.window_width, args.window_height), pygame.RESIZABLE)
         else:
-            screen = pygame.display.set_mode((args.window_width, args.window_height), pygame.RESIZABLE)
+            screen = pygame.surface.Surface((args.window_width, args.window_height))            
+            infoObject = ""
     else:
         screen = ""
         infoObject = ""

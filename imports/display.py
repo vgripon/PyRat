@@ -135,16 +135,17 @@ def init_coords_and_images(width, height, player1_is_alive, player2_is_alive, wi
         for j in range(height):
             tiles[i].append(random.randrange(10))
 
-    if not(player1_is_alive):
-        image_rat = image_rat.convert()
-        image_rat.set_alpha(0)
-        image_moving_rat = image_moving_rat.convert()
-        image_moving_rat.set_alpha(0)
-    if not(player2_is_alive):
-        image_python = image_python.convert()
-        image_python.set_alpha(0)
-        image_moving_python = image_moving_python.convert()
-        image_moving_python.set_alpha(0)
+    if not(args.saveimages):
+        if not(player1_is_alive):
+            image_rat = image_rat.convert()
+            image_rat.set_alpha(0)
+            image_moving_rat = image_moving_rat.convert()
+            image_moving_rat.set_alpha(0)
+        if not(player2_is_alive):
+            image_python = image_python.convert()
+            image_python.set_alpha(0)
+            image_moving_python = image_moving_python.convert()
+            image_moving_python.set_alpha(0)
     return scale, offset_x, offset_y, image_cheese, image_corner, image_moving_python, image_moving_rat, image_python, image_rat, image_wall, image_mud, image_portrait_python, image_portrait_rat, tiles, image_tile
 
 def build_background(screen, maze, tiles, image_tile, image_wall, image_corner, image_mud, offset_x, offset_y, width, height, window_width, window_height, image_portrait_rat, image_portrait_python, scale, player1_is_alive, player2_is_alive):
@@ -165,11 +166,15 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
     global args
 
     debug("Starting rendering",2)
-    window_width, window_height = pygame.display.get_surface().get_size()
+    if args.saveimages:
+        window_width, window_height = args.window_width, args.window_height
+    else:
+        window_width, window_height = pygame.display.get_surface().get_size()
     turn_time = args.turn_time
     scale, offset_x, offset_y, image_cheese, image_corner, image_moving_python, image_moving_rat, image_python, image_rat, image_wall, image_mud, image_portrait_python, image_portrait_rat, tiles, image_tile = init_coords_and_images(width, height, player1_is_alive, player2_is_alive, window_width, window_height)
 
     debug("Defining constants",2)
+    d = 10000000
     clock = pygame.time.Clock()
     new_player1_location = player1_location
     new_player2_location = player2_location
@@ -267,79 +272,88 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
         except:
             ()
         debug("Looking for updates from core program",2)
-        while not(q.empty()):
-            pieces_of_cheese, nnew_player1_location, nnew_player2_location, score1, score2, moves1, moves2, miss1, miss2, stuck1, stuck2 = q.get()            
-            if not(args.desactivate_animations):
-                if nnew_player1_location != new_player1_location:
-                    time_to_go1 = pygame.time.get_ticks() + turn_time * maze[new_player1_location][nnew_player1_location]
-                    player1_location = new_player1_location
-                if nnew_player2_location != new_player2_location:
-                    player2_location = new_player2_location
-                    time_to_go2 = pygame.time.get_ticks() + turn_time * maze[new_player2_location][nnew_player2_location]
-            new_player1_location = nnew_player1_location
-            new_player2_location = nnew_player2_location
+        if (args.desactivate_animations and not(q.empty())) or not(args.desactivate_animations):
             if args.desactivate_animations:
-                player1_location = new_player1_location
-                player2_location = new_player2_location
+                pieces_of_cheese, nnew_player1_location, nnew_player2_location, score1, score2, moves1, moves2, miss1, miss2, stuck1, stuck2 = q.get()
+                player1_location = nnew_player1_location
+                player2_location = nnew_player2_location
+            else:
+                while not(q.empty()):
+                    pieces_of_cheese, nnew_player1_location, nnew_player2_location, score1, score2, moves1, moves2, miss1, miss2, stuck1, stuck2 = q.get()
+                    if not(args.desactivate_animations):
+                        if nnew_player1_location != new_player1_location:
+                            time_to_go1 = pygame.time.get_ticks() + turn_time * maze[new_player1_location][nnew_player1_location]
+                            player1_location = new_player1_location
+                        if nnew_player2_location != new_player2_location:
+                            player2_location = new_player2_location
+                            time_to_go2 = pygame.time.get_ticks() + turn_time * maze[new_player2_location][nnew_player2_location]
+                    new_player1_location = nnew_player1_location
+                    new_player2_location = nnew_player2_location
+                
+            debug("Starting draw",2)
+            screen.fill((0, 0, 0))
+            screen.blit(maze_image, (0, 0))
+            draw_pieces_of_cheese(pieces_of_cheese, image_cheese, offset_x, offset_y, scale, width, height, screen, window_height)
 
-        debug("Starting draw",2)
-        screen.fill((0, 0, 0))
-        screen.blit(maze_image, (0, 0))
-        
-        draw_pieces_of_cheese(pieces_of_cheese, image_cheese, offset_x, offset_y, scale, width, height, screen, window_height)
-        if not(args.desactivate_animations):
-            if time_to_go1 <= pygame.time.get_ticks() or player1_location == new_player1_location:
-                player1_location = new_player1_location
-                player1_draw_location = player1_location
-            else:
-                prop = (time_to_go1 - pygame.time.get_ticks()) / (maze[player1_location][new_player1_location] * turn_time)
-                i, j = player1_location
-                ii, jj = new_player1_location
-                player1_draw_location = i * prop + ii * (1 - prop), j * prop + jj * (1 - prop)
-                if ii > i:
-                    image1 = pygame.transform.rotate(image_moving_rat, 270)
-                elif ii < i:
-                    image1 = pygame.transform.rotate(image_moving_rat, 90)
-                elif j < jj:
-                    image1 = pygame.transform.rotate(image_moving_rat, 0)
+            if not(args.desactivate_animations):
+                if time_to_go1 <= pygame.time.get_ticks() or player1_location == new_player1_location:
+                    player1_location = new_player1_location
+                    player1_draw_location = player1_location
                 else:
-                    image1 = pygame.transform.rotate(image_moving_rat, 180)
-            if time_to_go2 <= pygame.time.get_ticks() or player2_location == new_player2_location:
-                player2_location = new_player2_location
-                player2_draw_location = player2_location
-            else:
-                prop = (time_to_go2 - pygame.time.get_ticks()) / (maze[player2_location][new_player2_location] * turn_time)
-                i, j = player2_location
-                ii, jj = new_player2_location
-                player2_draw_location = i * prop + ii * (1 - prop), j * prop + jj * (1 - prop)
-                if ii > i:
-                    image2 = pygame.transform.rotate(image_moving_python, 270)
-                elif ii < i:
-                    image2 = pygame.transform.rotate(image_moving_python, 90)
-                elif j < jj:
-                    image2 = pygame.transform.rotate(image_moving_python, 0)
+                    prop = (time_to_go1 - pygame.time.get_ticks()) / (maze[player1_location][new_player1_location] * turn_time)
+                    i, j = player1_location
+                    ii, jj = new_player1_location
+                    player1_draw_location = i * prop + ii * (1 - prop), j * prop + jj * (1 - prop)
+                    if ii > i:
+                        image1 = pygame.transform.rotate(image_moving_rat, 270)
+                    elif ii < i:
+                        image1 = pygame.transform.rotate(image_moving_rat, 90)
+                    elif j < jj:
+                        image1 = pygame.transform.rotate(image_moving_rat, 0)
+                    else:
+                        image1 = pygame.transform.rotate(image_moving_rat, 180)
+                if time_to_go2 <= pygame.time.get_ticks() or player2_location == new_player2_location:
+                    player2_location = new_player2_location
+                    player2_draw_location = player2_location
                 else:
-                    image2 = pygame.transform.rotate(image_moving_python, 180)
-            draw_players_animate(player1_draw_location, player2_draw_location, image1, image2, offset_x, offset_y, scale, width, height, screen, window_height)
+                    prop = (time_to_go2 - pygame.time.get_ticks()) / (maze[player2_location][new_player2_location] * turn_time)
+                    i, j = player2_location
+                    ii, jj = new_player2_location
+                    player2_draw_location = i * prop + ii * (1 - prop), j * prop + jj * (1 - prop)
+                    if ii > i:
+                        image2 = pygame.transform.rotate(image_moving_python, 270)
+                    elif ii < i:
+                        image2 = pygame.transform.rotate(image_moving_python, 90)
+                    elif j < jj:
+                        image2 = pygame.transform.rotate(image_moving_python, 0)
+                    else:
+                        image2 = pygame.transform.rotate(image_moving_python, 180)
+                draw_players_animate(player1_draw_location, player2_draw_location, image1, image2, offset_x, offset_y, scale, width, height, screen, window_height)
+            else:#if desactivate_animations
+                draw_players(player1_location, player2_location, image_rat, image_python, offset_x, offset_y, scale, width, height, screen, window_height)
+            draw_scores(p1name, score1, image_portrait_rat, p2name, score2, image_portrait_python, window_width, window_height, screen, player1_is_alive, player2_is_alive, moves1, miss1, moves2, miss2, stuck1, stuck2)
+            if not(q_info.empty()):
+                text_info = q_info.get()
+            if text_info != "":
+                draw_text(text_info, (255,255,255), window_width, 4, window_width // 2, 25, screen)
+            if (pygame.time.get_ticks() - starting_time < args.preparation_time) and not(args.desactivate_animations):
+                remaining = args.preparation_time - pygame.time.get_ticks() + starting_time
+                if remaining > 0:
+                    draw_text("Starting in " + str(remaining // 1000) + "." + (str(remaining % 1000)).zfill(3), (255,255,255), window_width, 4, window_width // 2, 25, screen)
+
+            debug("Drawing on screen",2)
+            if not(args.saveimages):
+                pygame.display.flip()
+            if not(args.desactivate_animations):
+                clock.tick(60)
+            else:
+                if not(args.synchronous):                
+                    clock.tick(1000/turn_time)
+            if args.saveimages:
+                pygame.image.save(screen, "output_images/image" + str(d)[1:] + ".png")
+                d = d + 1
         else:
-            draw_players(player1_location, player2_location, image_rat, image_python, offset_x, offset_y, scale, width, height, screen, window_height)
-        draw_scores(p1name, score1, image_portrait_rat, p2name, score2, image_portrait_python, window_width, window_height, screen, player1_is_alive, player2_is_alive, moves1, miss1, moves2, miss2, stuck1, stuck2)
-        if not(q_info.empty()):
-            text_info = q_info.get()
-        if text_info != "":
-            draw_text(text_info, (255,255,255), window_width, 4, window_width // 2, 25, screen)
-        if pygame.time.get_ticks() - starting_time < args.preparation_time:
-            remaining = args.preparation_time - pygame.time.get_ticks() + starting_time
-            if remaining > 0:
-                draw_text("Starting in " + str(remaining // 1000) + "." + (str(remaining % 1000)).zfill(3), (255,255,255), window_width, 4, window_width // 2, 25, screen)
-
-        debug("Drawing on screen",2)
-        pygame.display.flip()
-        if not(args.desactivate_animations):
             clock.tick(60)
-        else:
-            if not(args.synchronous):                
-                clock.tick(1000/turn_time)
     debug("Exiting rendering", 2)
     q_render_in.put("quit")
     if is_human_python:
