@@ -57,7 +57,7 @@ args.window_height = int(10 * args.window_width / 16)
 if args.synchronous and not(args.desactivate_animations):
     print("Note: in synchronous mode, animations are automatically desactivated", file=sys.stderr)
     args.desactivate_animations = True
-if args.nodrawing:
+if args.nodrawing or args.save_images:
     args.auto_exit = True
 if args.tests > 1:
     args.auto_exit = True
