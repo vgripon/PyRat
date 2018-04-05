@@ -135,7 +135,7 @@ def init_coords_and_images(width, height, player1_is_alive, player2_is_alive, wi
         for j in range(height):
             tiles[i].append(random.randrange(10))
 
-    if not(args.saveimages):
+    if not(args.save_images):
         if not(player1_is_alive):
             image_rat = image_rat.convert()
             image_rat.set_alpha(0)
@@ -166,7 +166,7 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
     global args
 
     debug("Starting rendering",2)
-    if args.saveimages:
+    if args.save_images:
         window_width, window_height = args.window_width, args.window_height
     else:
         window_width, window_height = pygame.display.get_surface().get_size()
@@ -211,7 +211,7 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
     text_info = ""
 
     debug("Starting main loop",2)
-    while q_quit.empty():
+    while q_quit.empty() or (args.desactivate_animations and not(q.empty())):
         debug("Checking events",2)
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and (event.key == pygame.K_q or event.key == pygame.K_ESCAPE)):
@@ -342,14 +342,14 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
                     draw_text("Starting in " + str(remaining // 1000) + "." + (str(remaining % 1000)).zfill(3), (255,255,255), window_width, 4, window_width // 2, 25, screen)
 
             debug("Drawing on screen",2)
-            if not(args.saveimages):
+            if not(args.save_images):
                 pygame.display.flip()
             if not(args.desactivate_animations):
                 clock.tick(60)
             else:
                 if not(args.synchronous):                
                     clock.tick(1000/turn_time)
-            if args.saveimages:
+            if args.save_images:
                 pygame.image.save(screen, "output_images/image" + str(d)[1:] + ".png")
                 d = d + 1
         else:

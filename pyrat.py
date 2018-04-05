@@ -501,7 +501,7 @@ def main():
     pygame.init()
     debug("Defining screen object...")
     if not(args.nodrawing):
-        if not(args.saveimages):
+        if not(args.save_images):
             infoObject = pygame.display.Info()
             image_icon = pygame.image.load("resources/various/pyrat.ico")
             pygame.display.set_icon(image_icon)

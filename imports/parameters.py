@@ -39,7 +39,7 @@ parser.add_argument('--desactivate_animations', action='store_true', help='Desac
 parser.add_argument('--synchronous', action='store_true', help='Wait for players')
 parser.add_argument('-mt', '--max_turns', type=int, metavar = "mt", help='Max number of turns', default=2000)
 parser.add_argument('--nodrawing', action="store_true", help='Desactivate drawing')
-parser.add_argument('--saveimages', action="store_true", help='Draw in images instead of in window')
+parser.add_argument('--save_images', action="store_true", help='Draw in images instead of in window')
 parser.add_argument('--tests', type=int, metavar = "tests", help='Number of tests (for statistics)', default=1)
 parser.add_argument('--maze_file', metavar = "maze_file", help='Specific maze file to load', default="")
 parser.add_argument('--fullscreen', action="store_true", help='Start game in fullscreen (you can press the "f" key instead)')
