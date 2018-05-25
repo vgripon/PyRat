@@ -213,38 +213,39 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
     debug("Starting main loop",2)
     while q_quit.empty() or (args.desactivate_animations and not(q.empty())):
         debug("Checking events",2)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and (event.key == pygame.K_q or event.key == pygame.K_ESCAPE)):
-                q_quit.put("")
-                break
-            if event.type == pygame.VIDEORESIZE or (event.type == pygame.KEYDOWN and event.key == pygame.K_f):
-                if event.type == pygame.KEYDOWN and not(screen.get_flags() & 0x80000000):
-                    screen = pygame.display.set_mode((infoObject.current_w, infoObject.current_h), pygame.FULLSCREEN)
-                    window_width, window_height = infoObject.current_w, infoObject.current_h
-                else:
-                    if event.type == pygame.VIDEORESIZE:
-                        window_width, window_height = event.w, event.h
-                    screen = pygame.display.set_mode((window_width, window_height),pygame.RESIZABLE)
-                scale, offset_x, offset_y, image_cheese, image_corner, image_moving_python, image_moving_rat, image_python, image_rat, image_wall, image_mud, image_portrait_python, image_portrait_rat, tiles, image_tile = init_coords_and_images(width, height, player1_is_alive, player2_is_alive, window_width, window_height)
-                maze_image = build_background(screen, maze, tiles, image_tile, image_wall, image_corner, image_mud, offset_x, offset_y, width, height, window_width, window_height, image_portrait_rat, image_portrait_python, scale, player1_is_alive, player2_is_alive)
-                
-            if event.type == pygame.KEYDOWN and (is_human_rat or is_human_python):                
-                if event.key == pygame.K_LEFT:
-                    play(q1_out, "L")
-                if event.key == pygame.K_RIGHT:
-                    play(q1_out, "R")
-                if event.key == pygame.K_UP:
-                    play(q1_out, "U")
-                if event.key == pygame.K_DOWN:
-                    play(q1_out, "D")
-                if event.key == pygame.K_KP4:
-                    play(q2_out, "L")
-                if event.key == pygame.K_KP6:
-                    play(q2_out, "R")
-                if event.key == pygame.K_KP8:
-                    play(q2_out, "U")
-                if event.key == pygame.K_KP5:
-                    play(q2_out, "D")
+        if not(args.save_images):
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and (event.key == pygame.K_q or event.key == pygame.K_ESCAPE)):
+                    q_quit.put("")
+                    break
+                if event.type == pygame.VIDEORESIZE or (event.type == pygame.KEYDOWN and event.key == pygame.K_f):
+                    if event.type == pygame.KEYDOWN and not(screen.get_flags() & 0x80000000):
+                        screen = pygame.display.set_mode((infoObject.current_w, infoObject.current_h), pygame.FULLSCREEN)
+                        window_width, window_height = infoObject.current_w, infoObject.current_h
+                    else:
+                        if event.type == pygame.VIDEORESIZE:
+                            window_width, window_height = event.w, event.h
+                            screen = pygame.display.set_mode((window_width, window_height),pygame.RESIZABLE)
+                            scale, offset_x, offset_y, image_cheese, image_corner, image_moving_python, image_moving_rat, image_python, image_rat, image_wall, image_mud, image_portrait_python, image_portrait_rat, tiles, image_tile = init_coords_and_images(width, height, player1_is_alive, player2_is_alive, window_width, window_height)
+                            maze_image = build_background(screen, maze, tiles, image_tile, image_wall, image_corner, image_mud, offset_x, offset_y, width, height, window_width, window_height, image_portrait_rat, image_portrait_python, scale, player1_is_alive, player2_is_alive)
+
+                if event.type == pygame.KEYDOWN and (is_human_rat or is_human_python):                
+                    if event.key == pygame.K_LEFT:
+                        play(q1_out, "L")
+                    if event.key == pygame.K_RIGHT:
+                        play(q1_out, "R")
+                    if event.key == pygame.K_UP:
+                        play(q1_out, "U")
+                    if event.key == pygame.K_DOWN:
+                        play(q1_out, "D")
+                    if event.key == pygame.K_KP4:
+                        play(q2_out, "L")
+                    if event.key == pygame.K_KP6:
+                        play(q2_out, "R")
+                    if event.key == pygame.K_KP8:
+                        play(q2_out, "U")
+                    if event.key == pygame.K_KP5:
+                        play(q2_out, "D")
 
         debug("Processing joysticks",2)
         try:

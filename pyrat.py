@@ -37,7 +37,7 @@ if args.import_keras:
 
 # Sound effects. There are three sounds corresponding to any combination of players taking pieces of cheese at a given moment
 try:
-    if not(args.nodrawing):
+    if not(args.nodrawing) and not(args.save_images):
         pygame.mixer.init(frequency = 44100, size = -16, channels = 1, buffer = 2**12)
         effect_left = pygame.mixer.Sound("resources/cheese_left.wav")
         effect_right = pygame.mixer.Sound("resources/cheese_right.wav")
@@ -410,7 +410,7 @@ def run_game(screen, infoObject):
             ()
 
         # Magic solver for windows problems (does not like pygame in threads)
-        if not(args.nodrawing):
+        if not(args.nodrawing) and not(args.save_images):
             pygame.event.pump()
         
         # Finally update informations about the game
@@ -515,9 +515,9 @@ def main():
         else:
             screen = pygame.surface.Surface((args.window_width, args.window_height))            
             infoObject = ""
-    else:
+    else:        
         screen = ""
-        infoObject = ""
+        infoObject = ""        
     # Run first game
     debug("Starting first game")
     result = run_game(screen, infoObject)
