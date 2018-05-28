@@ -83,7 +83,7 @@ def draw_text(text, color, max_size, index_size, x, y, screen):
         font_sizes[index_size] = font_sizes[index_size] - 1
         font = pygame.font.SysFont("monospace", font_sizes[index_size])
         label = font.render(text, 1, color)
-    pygame.draw.rect(screen, (0,0,0), (x - label.get_rect().width // 2, y, label.get_rect().width,label.get_rect().height))
+    pygame.draw.rect(screen, (57,57,64), (x - label.get_rect().width // 2, y, label.get_rect().width,label.get_rect().height))
     screen.blit(label, (x - label.get_rect().width // 2,y))
     
 def draw_scores(p1name, score1, image1, p2name, score2, image2, window_width, window_height, screen, player1_is_alive, player2_is_alive, moves1, miss1, moves2, miss2, stuck1, stuck2):
@@ -114,7 +114,7 @@ def init_coords_and_images(width, height, player1_is_alive, player2_is_alive, wi
     offset_x = window_width // 2 - int(width / 2 * scale)
     offset_y = max(25, window_height // 2 - int(scale * height / 2))
     scale_portrait_w = int(window_width / 6)
-    scale_portrait_h = int(window_width / 6 * 800 / 541)
+    scale_portrait_h = int(window_width / 6)
 
     image_cheese = pygame.transform.smoothscale(pygame.image.load("resources/gameElements/cheese.png"),(scale, scale))
     image_corner = pygame.transform.smoothscale(pygame.image.load("resources/gameElements/corner.png"),(scale, scale))
@@ -150,15 +150,15 @@ def init_coords_and_images(width, height, player1_is_alive, player2_is_alive, wi
 
 def build_background(screen, maze, tiles, image_tile, image_wall, image_corner, image_mud, offset_x, offset_y, width, height, window_width, window_height, image_portrait_rat, image_portrait_python, scale, player1_is_alive, player2_is_alive):
     global font_sizes
-    screen.fill((0, 0, 0))
+    screen.fill((57,57,64))
     font_sizes = [50, 25, 50, 25, 50, 50, 50]
     maze_image = screen.copy()
     image_of_maze(maze, tiles, image_tile, image_wall, image_corner, image_mud, offset_x, offset_y, scale, width, height, maze_image, window_height)
 
     if player1_is_alive:
-        maze_image.blit(image_portrait_rat, (int(window_width /12 - image_portrait_python.get_rect().width / 2), 15))
+        maze_image.blit(image_portrait_rat, (int(window_width /12 - image_portrait_python.get_rect().width / 2), 100))
     if player2_is_alive:
-        maze_image.blit(image_portrait_python, (int(window_width * 11 / 12 - image_portrait_python.get_rect().width / 2), 15))
+        maze_image.blit(image_portrait_python, (int(window_width * 11 / 12 - image_portrait_python.get_rect().width / 2), 100))
     return maze_image
 
     
@@ -292,7 +292,7 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
                     new_player2_location = nnew_player2_location
                 
             debug("Starting draw",2)
-            screen.fill((0, 0, 0))
+            screen.fill((57, 57, 64))
             screen.blit(maze_image, (0, 0))
             draw_pieces_of_cheese(pieces_of_cheese, image_cheese, offset_x, offset_y, scale, width, height, screen, window_height)
 
