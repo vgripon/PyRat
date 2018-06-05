@@ -29,33 +29,54 @@ def image_of_maze(maze, tiles, image_tile, image_wall, image_corner, image_mud, 
     for i in range(width):
         for j in range(height):
             if not((i-1,j) in maze[(i,j)]):
-                screen.blit(image_wall, (offset_x + scale * i, window_height - offset_y - scale * (j+1)))
+                pass
             elif maze[(i,j)][(i-1,j)] > 1:
-                screen.blit(image_mud, (offset_x + scale * i, window_height - offset_y - scale * (j+1)))
-            if not((i+1,j) in maze[(i,j)]):
-                screen.blit(pygame.transform.rotate(image_wall, 180), (offset_x + scale * i, window_height - offset_y - scale * (j+1)))
-            elif maze[(i,j)][(i+1,j)] > 1:
-                screen.blit(pygame.transform.rotate(image_mud, 180), (offset_x + scale * i, window_height - offset_y - scale * (j+1)))
+                screen.blit(image_mud, (offset_x + scale * i - scale/2, window_height - offset_y - scale * (j+1)))
             if not((i,j+1) in maze[(i,j)]):
-                screen.blit(pygame.transform.rotate(image_wall, 270), (offset_x + scale * i, window_height - offset_y - scale * (j+1)))
+                pass
             elif maze[(i,j)][(i,j+1)] > 1:
-                screen.blit(pygame.transform.rotate(image_mud, 270), (offset_x + scale * i, window_height - offset_y - scale * (j+1)))
-            if not((i,j-1) in maze[(i,j)]):
-                screen.blit(pygame.transform.rotate(image_wall, 90), (offset_x + scale * i, window_height - offset_y - scale * (j+1)))
-            elif maze[(i,j)][(i,j-1)] > 1:
-                 screen.blit(pygame.transform.rotate(image_mud, 90), (offset_x + scale * i, window_height - offset_y - scale * (j+1)))
+                screen.blit(pygame.transform.rotate(image_mud, 270), (offset_x + scale * i, window_height - offset_y - scale * (j+1) - scale/2))
     for i in range(width):
-        screen.blit(pygame.transform.rotate(image_wall, 270), (offset_x + scale * i, window_height - offset_y))
-        screen.blit(pygame.transform.rotate(image_wall, 90), (offset_x + scale * i, window_height - offset_y - scale * (height + 1)))
+        for j in range(height):
+            if not((i-1,j) in maze[(i,j)]):
+                screen.blit(image_wall, (offset_x + scale * i - scale / 2, window_height - offset_y - scale * (j+1)))
+            if not((i,j+1) in maze[(i,j)]):
+                screen.blit(pygame.transform.rotate(image_wall, 270), (offset_x + scale * i, window_height - offset_y - scale * (j+1) - scale/2))
+    for i in range(width):
+        screen.blit(pygame.transform.rotate(image_wall, 270), (offset_x + scale * i, window_height - offset_y - scale/2))
     for j in range(height):
-        screen.blit(image_wall, (offset_x + scale * width , window_height - offset_y - scale * (j+1)))
-        screen.blit(pygame.transform.rotate(image_wall, 180), (offset_x - scale, window_height - offset_y - scale * (j+1)))
+        screen.blit(image_wall, (offset_x + scale * width -scale/2, window_height - offset_y - scale * (j+1)))
     for i in range(width+1):
         for j in range(height+1):
-            screen.blit(image_corner, (offset_x + scale * i, window_height - offset_y - scale * j))
-            screen.blit(pygame.transform.rotate(image_corner, 90), (offset_x + scale * i, window_height - offset_y - scale * (j+1)))
-            screen.blit(pygame.transform.rotate(image_corner, 180), (offset_x + scale * (i-1), window_height - offset_y - scale * (j+1)))
-            screen.blit(pygame.transform.rotate(image_corner, 270), (offset_x + scale * (i-1), window_height - offset_y - scale * j))
+            horiz = False
+            vert = False
+            count = 0
+            if i == 0 or i == width:
+                vert = True
+            if j == 0 or j == height:
+                horiz = True
+            # is there a wall left?
+            if i > 0 and j < height and j > 0:
+                if (i-1,j) not in maze[(i-1,j-1)]:
+                    horiz = True
+                    count = count + 1
+            # is there a wall right?
+            if i < width and j < height and j > 0:
+                if (i,j-1) not in maze[(i,j)]:
+                    horiz = True
+                    count = count + 1
+            # is there a wall up?
+            if i > 0 and i < width and j < height:
+                if (i,j) not in maze[(i-1,j)]:
+                    vert = True
+                    count = count + 1
+            # is there a wall down?
+            if i > 0 and i < width and j > 0:
+                if (i,j-1) not in maze[(i-1,j-1)]:
+                    vert = True
+                    count = count + 1
+            if vert and horiz or count == 1:                
+                screen.blit(image_corner, (offset_x + scale * i - scale/2, window_height - offset_y - scale * j - scale/2))
 
 def draw_pieces_of_cheese(pieces_of_cheese, image_cheese, offset_x, offset_y, scale, width, height, screen, window_height):
     for (i,j) in pieces_of_cheese:
