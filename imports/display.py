@@ -75,30 +75,30 @@ def draw_players_animate(player1_location, player2_location, image_python, image
     screen.blit(image_rat, (offset_x + scale * i, window_height - offset_y - scale * (j+1)))
 
 font_sizes = [50, 25, 50, 25, 50, 50, 50]
-def draw_text(text, color, max_size, index_size, x, y, screen):
+def draw_text(text, font, color, max_size, index_size, x, y, screen):
     global font_sizes
-    font = pygame.font.SysFont("monospace", font_sizes[index_size])    
+    font = pygame.font.Font("resources/fonts/" + font + ".ttf", font_sizes[index_size])    
     label = font.render(text, 1, color)
     while(label.get_rect().width > max_size):
         font_sizes[index_size] = font_sizes[index_size] - 1
         font = pygame.font.SysFont("monospace", font_sizes[index_size])
         label = font.render(text, 1, color)
-    pygame.draw.rect(screen, (57,57,64), (x - label.get_rect().width // 2, y, label.get_rect().width,label.get_rect().height))
+    # pygame.draw.rect(screen, (57,57,64), (x - label.get_rect().width // 2, y, label.get_rect().width,label.get_rect().height))
     screen.blit(label, (x - label.get_rect().width // 2,y))
     
 def draw_scores(p1name, score1, image1, p2name, score2, image2, window_width, window_height, screen, player1_is_alive, player2_is_alive, moves1, miss1, moves2, miss2, stuck1, stuck2):
     if player1_is_alive:
-        draw_text("Score: "+str(score1), (255,255,255), window_width / 6, 0, int(window_width / 12), window_width / 3 + 50, screen)
-        draw_text(p1name, (255,255,255), window_width / 6, 5, int(window_width / 12), window_width / 3, screen)
-        draw_text("Moves: " + str(moves1), (0,255,0), window_width / 6, 1, int(window_width / 12), window_width / 3 + 150, screen)
-        draw_text("Miss: " + str(miss1), (255,0,0), window_width / 6, 1, int(window_width / 12), window_width / 3 + 180, screen)
-        draw_text("Mud: " + str(stuck1), (255,0,0), window_width / 6, 1, int(window_width / 12), window_width / 3 + 210, screen)
+        draw_text("Score: "+str(score1), "Kalam-Bold", (50,50,50), window_width / 6, 0, int(window_width / 12), window_width / 3 + 50, screen)
+        draw_text(p1name, "Kalam-Bold", (50,50,50), window_width / 6, 5, int(window_width / 12), window_width / 3, screen)
+        draw_text("Moves: " + str(moves1), "Kalam-Regular", (2,118,137), window_width / 6, 1, int(window_width / 12), window_width / 3 + 150, screen)
+        draw_text("Miss: " + str(miss1), "Kalam-Regular", (229,35,64), window_width / 6, 1, int(window_width / 12), window_width / 3 + 180, screen)
+        draw_text("Mud: " + str(stuck1), "Kalam-Regular", (229,35,64), window_width / 6, 1, int(window_width / 12), window_width / 3 + 210, screen)
     if player2_is_alive:
-        draw_text("Score: "+str(score2), (255,255,255), window_width / 6, 2, int(11 * window_width / 12), window_width / 3 + 50, screen)
-        draw_text(p2name, (255,255,255), window_width / 6, 6, int(11 * window_width / 12), window_width / 3, screen)
-        draw_text("Moves: " + str(moves2), (0,255,0), window_width / 6, 3, int(11 * window_width / 12), window_width / 3 + 150, screen)
-        draw_text("Miss: " + str(miss2), (255,0,0), window_width / 6, 3, int(11 * window_width / 12), window_width / 3 + 180, screen)
-        draw_text("Mud: " + str(stuck2), (255,0,0), window_width / 6, 3, int(11 * window_width / 12), window_width / 3 + 210, screen)    
+        draw_text("Score: "+str(score2), "Kalam-Bold", (50,50,50), window_width / 6, 2, int(11 * window_width / 12), window_width / 3 + 50, screen)
+        draw_text(p2name, "Kalam-Bold", (50,50,50), window_width / 6, 6, int(11 * window_width / 12), window_width / 3, screen)
+        draw_text("Moves: " + str(moves2), "Kalam-Regular", (2,118,137), window_width / 6, 3, int(11 * window_width / 12), window_width / 3 + 150, screen)
+        draw_text("Miss: " + str(miss2), "Kalam-Regular", (229,35,64), window_width / 6, 3, int(11 * window_width / 12), window_width / 3 + 180, screen)
+        draw_text("Mud: " + str(stuck2), "Kalam-Regular", (229,35,64), window_width / 6, 3, int(11 * window_width / 12), window_width / 3 + 210, screen)    
 
 def display_exit():
     pygame.quit()
@@ -116,6 +116,7 @@ def init_coords_and_images(width, height, player1_is_alive, player2_is_alive, wi
     scale_portrait_w = int(window_width / 6)
     scale_portrait_h = int(window_width / 6)
 
+    image_background = pygame.transform.smoothscale(pygame.image.load("resources/illustrations/background.jpg"),(window_width, window_height))
     image_cheese = pygame.transform.smoothscale(pygame.image.load("resources/gameElements/cheese.png"),(scale, scale))
     image_corner = pygame.transform.smoothscale(pygame.image.load("resources/gameElements/corner.png"),(scale, scale))
     image_moving_python = pygame.transform.smoothscale(pygame.image.load("resources/gameElements/movingPython.png"),(scale, scale))
@@ -146,14 +147,16 @@ def init_coords_and_images(width, height, player1_is_alive, player2_is_alive, wi
             image_python.set_alpha(0)
             image_moving_python = image_moving_python.convert()
             image_moving_python.set_alpha(0)
-    return scale, offset_x, offset_y, image_cheese, image_corner, image_moving_python, image_moving_rat, image_python, image_rat, image_wall, image_mud, image_portrait_python, image_portrait_rat, tiles, image_tile
+    return scale, offset_x, offset_y, image_background, image_cheese, image_corner, image_moving_python, image_moving_rat, image_python, image_rat, image_wall, image_mud, image_portrait_python, image_portrait_rat, tiles, image_tile
 
-def build_background(screen, maze, tiles, image_tile, image_wall, image_corner, image_mud, offset_x, offset_y, width, height, window_width, window_height, image_portrait_rat, image_portrait_python, scale, player1_is_alive, player2_is_alive):
+def build_background(screen, maze, tiles, image_background, image_tile, image_wall, image_corner, image_mud, offset_x, offset_y, width, height, window_width, window_height, image_portrait_rat, image_portrait_python, scale, player1_is_alive, player2_is_alive):
     global font_sizes
-    screen.fill((57,57,64))
+    # screen.fill((57,57,64))
     font_sizes = [50, 25, 50, 25, 50, 50, 50]
     maze_image = screen.copy()
+    maze_image.blit(image_background, (0,0))
     image_of_maze(maze, tiles, image_tile, image_wall, image_corner, image_mud, offset_x, offset_y, scale, width, height, maze_image, window_height)
+    
 
     if player1_is_alive:
         maze_image.blit(image_portrait_rat, (int(window_width /12 - image_portrait_python.get_rect().width / 2), 100))
@@ -171,7 +174,7 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
     else:
         window_width, window_height = pygame.display.get_surface().get_size()
     turn_time = args.turn_time
-    scale, offset_x, offset_y, image_cheese, image_corner, image_moving_python, image_moving_rat, image_python, image_rat, image_wall, image_mud, image_portrait_python, image_portrait_rat, tiles, image_tile = init_coords_and_images(width, height, player1_is_alive, player2_is_alive, window_width, window_height)
+    scale, offset_x, offset_y, image_background, image_cheese, image_corner, image_moving_python, image_moving_rat, image_python, image_rat, image_wall, image_mud, image_portrait_python, image_portrait_rat, tiles, image_tile = init_coords_and_images(width, height, player1_is_alive, player2_is_alive, window_width, window_height)
 
     debug("Defining constants",2)
     d = 10000000
@@ -204,7 +207,7 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
         ()
 
     debug("Building background image",2)
-    maze_image = build_background(screen, maze, tiles, image_tile, image_wall, image_corner, image_mud, offset_x, offset_y, width, height, window_width, window_height, image_portrait_rat, image_portrait_python, scale, player1_is_alive, player2_is_alive)
+    maze_image = build_background(screen, maze, tiles, image_background, image_tile, image_wall, image_corner, image_mud, offset_x, offset_y, width, height, window_width, window_height, image_portrait_rat, image_portrait_python, scale, player1_is_alive, player2_is_alive)
 
     starting_time = pygame.time.get_ticks()
 
@@ -226,8 +229,8 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
                         if event.type == pygame.VIDEORESIZE:
                             window_width, window_height = event.w, event.h
                             screen = pygame.display.set_mode((window_width, window_height),pygame.RESIZABLE)
-                            scale, offset_x, offset_y, image_cheese, image_corner, image_moving_python, image_moving_rat, image_python, image_rat, image_wall, image_mud, image_portrait_python, image_portrait_rat, tiles, image_tile = init_coords_and_images(width, height, player1_is_alive, player2_is_alive, window_width, window_height)
-                            maze_image = build_background(screen, maze, tiles, image_tile, image_wall, image_corner, image_mud, offset_x, offset_y, width, height, window_width, window_height, image_portrait_rat, image_portrait_python, scale, player1_is_alive, player2_is_alive)
+                            scale, offset_x, offset_y, image_background, image_cheese, image_corner, image_moving_python, image_moving_rat, image_python, image_rat, image_wall, image_mud, image_portrait_python, image_portrait_rat, tiles, image_tile = init_coords_and_images(width, height, player1_is_alive, player2_is_alive, window_width, window_height)
+                            maze_image = build_background(screen, maze, tiles, image_background, image_tile, image_wall, image_corner, image_mud, offset_x, offset_y, width, height, window_width, window_height, image_portrait_rat, image_portrait_python, scale, player1_is_alive, player2_is_alive)
 
                 if event.type == pygame.KEYDOWN and (is_human_rat or is_human_python):                
                     if event.key == pygame.K_LEFT:
@@ -336,11 +339,11 @@ def run(maze, width, height, q, q_render_in, q_quit, p1name, p2name, q1_out, q2_
             if not(q_info.empty()):
                 text_info = q_info.get()
             if text_info != "":
-                draw_text(text_info, (255,255,255), window_width, 4, window_width // 2, 25, screen)
+                draw_text(text_info, "Kalam-Bold", (50,50,50), window_width, 4, window_width // 2, 25, screen)
             if (pygame.time.get_ticks() - starting_time < args.preparation_time) and not(args.desactivate_animations):
                 remaining = args.preparation_time - pygame.time.get_ticks() + starting_time
                 if remaining > 0:
-                    draw_text("Starting in " + str(remaining // 1000) + "." + (str(remaining % 1000)).zfill(3), (255,255,255), window_width, 4, window_width // 2, 25, screen)
+                    draw_text("Starting in " + str(remaining // 1000) + "." + (str(remaining % 1000)).zfill(3), "Kalam-Bold", (50,50,50), window_width, 4, window_width // 2, 25, screen)
 
             debug("Drawing on screen",2)
             if not(args.save_images):
