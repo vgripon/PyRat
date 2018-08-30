@@ -22,15 +22,50 @@ To be able to run, one should only need python3 and pygame for python3
 
 * On Ubuntu, a typical installation would be:
 
+```bash
 sudo apt-get install python3-setuptools
-
 sudo easy_install3 pip
-
 sudo pip3.5 install pygame
+```
 
 * On Windows:
 
+```bash
 pip install pygame
+```
+
+* On macOS:
+
+macOS ships with Python 2 by default. There is several ways to install Python 3, such as from [Python.org](https://www.python.org/downloads/release/python-370/) or using [Homebrew](https://brew.sh/). Here we show how to do it using Anaconda, which cleanly separates Python 3 from the system Python, and can be removed easily.
+
+Download and install Anaconda (Python 3.x version): https://www.anaconda.com/download/#macos.  
+Then, create a Conda environment and setup the dependencies:
+```bash
+conda create -n pyrat_env python=3.6
+source activate pyrat_env
+pip install pygame
+```
+
+To run PyRat:
+```bash
+source activate pyrat_env
+python pyrat.py
+```
+
+Note that inside the Conda environment, `python` and `python3` link to Python 3, while `python2` links to the system Python 2.
+```bash
+python --version
+# Python 3.6.5 :: Anaconda, Inc.
+python3 --version
+# Python 3.6.5 :: Anaconda, Inc.
+python2 --version
+# Python 2.7.10
+```
+
+If wanted, Anaconda can be removed by running the following:
+```bash
+rm -r /anaconda3 ~/.condarc ~/.conda ~/.continuum
+```
 
 # Notes
 
