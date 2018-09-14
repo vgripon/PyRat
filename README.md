@@ -28,10 +28,44 @@ sudo easy_install3 pip
 sudo pip3.5 install pygame
 ```
 
+On 18.04, users reported using:
+
+```bash
+> sudo apt-get install python3-pip
+> pip3 -V
+pip 9.0.1 from /usr/lib/python3/dist-packages (python 3.6)
+> sudo pip3 install pygame
+```
+
+Test your installation. In the pyrat directory, type:
+
+```bash
+python3 pyrat.py --rat AIs/random.py
+```
+
 * On Windows:
 
 ```bash
 pip install pygame
+```
+
+With more details:
+
+Install Python 3 from https://www.python.org/downloads/windows/: select the version for your architecture, 32 bits or
+  64 bits. Download and launch the installer.
+
+Select "Add Python 3.x to Path" in order to be able to launch the Python interpreter from any directory.
+
+Select "Install now": the default option locally installs Python 3 for the current user.
+  
+Install the library "pygame". Launch "cmd" and then type:
+```bash
+> python -m pip install -U pygame --user
+```
+
+Test your installation. In the pyrat directory, type:
+```bash
+> python pyrat.py --rat AIs\random.py
 ```
 
 * On macOS:
