@@ -31,10 +31,10 @@ sudo pip3.5 install pygame
 On 18.04, users reported using:
 
 ```bash
-> sudo apt-get install python3-pip
-> pip3 -V
-pip 9.0.1 from /usr/lib/python3/dist-packages (python 3.6)
-> sudo pip3 install pygame
+sudo apt-get install python3-pip
+pip3 -V
+# pip 9.0.1 from /usr/lib/python3/dist-packages (python 3.6)
+sudo pip3 install pygame
 ```
 
 Test your installation. In the pyrat directory, type:
@@ -60,12 +60,12 @@ Select "Install now": the default option locally installs Python 3 for the curre
   
 Install the library "pygame". Launch "cmd" and then type:
 ```bash
-> python -m pip install -U pygame --user
+python -m pip install -U pygame --user
 ```
 
 Test your installation. In the pyrat directory, type:
 ```bash
-> python pyrat.py --rat AIs\random.py
+python pyrat.py --rat AIs\random.py
 ```
 
 * On macOS:
