@@ -182,7 +182,7 @@ def generate_pieces_of_cheese(nb_pieces, width, height, symmetry, player1_locati
             remaining = remaining - 1
     for i in range(width):
         for j in range(height):
-            if (not(symmetry) or not((i,j) in considered)) and (i,j) != player1_location and (i,j) != player2_location:
+            if (not(symmetry) or not((i,j) in considered)) and (i,j) != player1_location and (i,j) != player2_location and (i,j) != (width - 1 - i, height - 1 - j):
                 candidates.append((i,j))
                 if symmetry:
                     considered.append((i,j))
