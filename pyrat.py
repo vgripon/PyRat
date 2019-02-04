@@ -213,13 +213,7 @@ def run_game(screen, infoObject):
     else:
         random_seed = args.random_seed
     print("Using seed " + str(random_seed), file=sys.stderr)
-    width, height, pieces_of_cheese, maze = generate_maze(args.width, args.height, args.density, not(args.nonconnected), not(args.nonsymmetric), args.mud_density, args.mud_range, args.maze_file, random_seed)
-    if args.maze_file == "":
-        player1_location = (-1,-1)
-        player2_location = (-1,-1)
-    else:
-        player1_location = (0,0)
-        player2_location = (width-1,height-1)
+    width, height, pieces_of_cheese, maze, player1_location, player2_location = generate_maze(args.width, args.height, args.density, not(args.nonconnected), not(args.nonsymmetric), args.mud_density, args.mud_range, args.maze_file, random_seed)
     # Generate cheese
     debug("Generating pieces of cheese",1)
     if args.random_cheese:

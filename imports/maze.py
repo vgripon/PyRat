@@ -53,7 +53,11 @@ def generate_maze(width, height, target_density, connected, symmetry, mud_densit
                     maze[(i,j)][(i-1,j)] = int(line[2])
                 if line[3] != "0":
                     maze[(i,j)][(i+1,j)] = int(line[3])
-        line = lines[height*width+2].split(" ")
+        player1_location_index = int(lines[height*width+2])
+        player1_location = (player1_location_index % width, player1_location_index // width)
+        player2_location_index = int(lines[height*width+3])
+        player2_location = (player2_location_index % width, player2_location_index // width)
+        line = lines[height*width+4].split(" ")
         pieces_of_cheese = []
         for i in range(len(line)):
             l = int(line[i])
@@ -160,7 +164,9 @@ def generate_maze(width, height, target_density, connected, symmetry, mud_densit
                         connected_region(maze, bsym, connected, possible_border)
                         possible_border.append(bsym)
         pieces_of_cheese = []
-    return width, height, pieces_of_cheese, maze
+        player1_location = (0,0)
+        player2_location = (width - 1, height - 1)
+    return width, height, pieces_of_cheese, maze, player1_location, player2_location
 
 # Generate pieces of cheese
 def generate_pieces_of_cheese(nb_pieces, width, height, symmetry, player1_location, player2_location, start_random):
@@ -168,8 +174,6 @@ def generate_pieces_of_cheese(nb_pieces, width, height, symmetry, player1_locati
         remaining = nb_pieces + 2
     else:
         remaining = nb_pieces
-        player1_location = (0, 0)
-        player2_location = (width - 1, height - 1)
     pieces = []
     candidates = []
     considered = []

@@ -6,6 +6,8 @@
 0 1 0 1
 0 1 1 1
 0 1 1 0
+0
+5
 5
 # A maze file contains multiple lines
 # The first line is the width, followed by no space
@@ -15,5 +17,6 @@
 # and contains 4 numbers separated with spaces and
 # corresponding to the weight of connecting it to
 # its upper cell, its downward cell, its left cell and its right cell
-# the last line contains the pieces of cheese, using the same encoding
+# the two lines after that are the starting positions for the rat and for the python
+# the last line contains the pieces of cheese locations, using the same encoding
 # and separated with blank spaces

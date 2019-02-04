@@ -500,6 +500,8 @@
 0 0 1 1
 0 0 1 1
 0 1 1 0
+0
+475
 475
 # A maze file contains multiple lines
 # The first line is the width, followed by no space
