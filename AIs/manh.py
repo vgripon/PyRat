@@ -1,5 +1,3 @@
-TEAM_NAME = "ManHGreedy"
-
 MOVE_DOWN = 'D'
 MOVE_LEFT = 'L'
 MOVE_RIGHT = 'R'
