@@ -81,7 +81,7 @@ def player(pet, filename, q_in, q_out, q_quit, width, height, preparation_time, 
         player = importlib.util.spec_from_file_location("player","imports/dummyplayer.py")
         module = importlib.util.module_from_spec(player)
         player.loader.exec_module(module)        
-        name = module.TEAM_NAME
+        name = "dummy"
         preprocessing = module.preprocessing
         turn = module.turn
         existence = False
