@@ -26,16 +26,17 @@ def image_of_maze(maze, tiles, image_tile, image_wall, image_corner, image_mud, 
     for i in range(width):
         for j in range(height):
             screen.blit(image_tile[tiles[i][j]], (offset_x + scale * i, window_height - offset_y - scale * (j+1)))
-    for i in range(width):
-        for j in range(height):
-            if not((i-1,j) in maze[(i,j)]):
-                pass
-            elif maze[(i,j)][(i-1,j)] > 1:
-                screen.blit(image_mud, (offset_x + scale * i - scale/2, window_height - offset_y - scale * (j+1)))
-            if not((i,j+1) in maze[(i,j)]):
-                pass
-            elif maze[(i,j)][(i,j+1)] > 1:
-                screen.blit(pygame.transform.rotate(image_mud, 270), (offset_x + scale * i, window_height - offset_y - scale * (j+1) - scale/2))
+    if not args.mud_no_display:
+        for i in range(width):
+            for j in range(height):
+                if not((i-1,j) in maze[(i,j)]):
+                    pass
+                elif maze[(i,j)][(i-1,j)] > 1:
+                    screen.blit(image_mud, (offset_x + scale * i - scale/2, window_height - offset_y - scale * (j+1)))
+                if not((i,j+1) in maze[(i,j)]):
+                    pass
+                elif maze[(i,j)][(i,j+1)] > 1:
+                    screen.blit(pygame.transform.rotate(image_mud, 270), (offset_x + scale * i, window_height - offset_y - scale * (j+1) - scale/2))
     for i in range(width):
         for j in range(height):
             if not((i-1,j) in maze[(i,j)]):

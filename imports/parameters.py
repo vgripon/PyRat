@@ -30,6 +30,7 @@ parser.add_argument('-p', '--pieces', type=int, metavar = "p", help='Number of p
 parser.add_argument('--nonsymmetric', action="store_true", help='Do not enforce symmetry of the maze')
 parser.add_argument('-md', '--mud_density', type=float, metavar = "md", help='Mud density', default=0.1)
 parser.add_argument('-mr', '--mud_range', type=int, metavar = "mr", help='Mud range (mud is between 2 and mr)', default=10)
+parser.add_argument('--mud_no_display', action="store_true", help='Does not display mud')
 parser.add_argument('--nonconnected', action="store_true", help='Does not enforce connectivity of the maze')
 parser.add_argument('--preparation_time', type=int, metavar = "pt", help='Preparation time in milliseconds', default=2000)
 parser.add_argument('--turn_time', type=int, metavar = "tt", help='Turn time in milliseconds', default=100)
