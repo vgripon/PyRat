@@ -23,6 +23,7 @@ from imports.display import *
 import importlib.util
 import sys
 import time
+import datetime
 from queue import Queue
 import queue
 from threading import Thread
@@ -44,7 +45,7 @@ try:
         effect_both = pygame.mixer.Sound("resources/cheese_both.wav")
         nosound = False
     else:
-        1/0
+        raise Exception("Error loading sounds")
 except:
     effect_left = ""
     effect_right = ""
@@ -145,7 +146,10 @@ def player(pet, filename, q_in, q_out, q_quit, width, height, preparation_time, 
         except Exception as e:
             traceback.print_exc()        
             print(e, file=sys.stderr,)
-    q_out.put((prep_time, turn_delay / turn_delay_count))
+    try:
+        q_out.put((prep_time, turn_delay / turn_delay_count))
+    except:
+        q_out.put((0,0))
     
 # Utility function to convert strange time object to float
 def convert_time_to_int(datetime):
@@ -206,6 +210,7 @@ def send_info(text, q_info):
 # and returns stats about the game
 def run_game(screen, infoObject):
     global is_human_rat, is_human_python
+
     # Generate connected maze
     debug("Generating maze",1)
     if not(args.random_seed):
