@@ -1,5 +1,7 @@
 # About
 
+This repository is for the MOOC version of the PyRat course. For in-class students, please refer to the following link: https://github.com/BastienPasdeloup/PyRat
+
 This is the software of the course [PyRat](http://formations.telecom-bretagne.eu/pyrat).
 
 Code by Vincent Gripon
